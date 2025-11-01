@@ -1,3 +1,7 @@
+philo
+obj
+.gitignore
+
 # Prerequisites
 *.d
 
