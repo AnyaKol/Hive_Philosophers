@@ -19,6 +19,7 @@ INCDIR = include
 
 SRC = \
 	main.c \
+	check_args.c \
 
 OBJDIR = obj
 OBJ = $(addprefix $(OBJDIR)/, $(SRC:.c=.o))

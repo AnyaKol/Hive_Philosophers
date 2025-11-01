@@ -16,4 +16,9 @@
 # define EXIT_FAILURE 1
 # define EXIT_SUCCESS 0
 
+# define ARGNUM "Error: Wrong number of arguments\n"
+# define NOTNUM "Error: Arguments not numerical\n"
+# define WFORMAT "Error: Wrong number format\n"
+# define OVERFLOW "Error: Number exceeds INT_MAX\n"
+
 #endif

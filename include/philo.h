@@ -22,9 +22,9 @@
 # include <sys/time.h>
 # include <pthread.h>
 
-extern volatile sig_atomic_t	g_last_sig;
+//extern volatile sig_atomic_t	g_last_sig;
 
-int	print_error(t_error err, char *token);
+bool	check_args(int argc, char **argv);
 
 /* ===== Memory arena ======================================================= */
 
