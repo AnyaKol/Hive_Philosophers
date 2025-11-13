@@ -1,24 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   ft_isdigit.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: akolupae <akolupae@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/11/01 17:25:40 by akolupae          #+#    #+#             */
-/*   Updated: 2025/11/13 15:01:54 by akolupae         ###   ########.fr       */
+/*   Created: 2025/04/15 11:13:25 by akolupae          #+#    #+#             */
+/*   Updated: 2025/04/15 11:16:49 by akolupae         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-int	main(int argc, char **argv)
+int	ft_isdigit(int c)
 {
-	if (!check_args(argc, argv))
-	{
-		printf("Invalid args\n");
-		return (EXIT_FAILURE);
-	}
-	printf("Good args\n");
-	return (EXIT_SUCCESS);
+	return ((unsigned char) c >= '0' && (unsigned char) c <= '9');
 }

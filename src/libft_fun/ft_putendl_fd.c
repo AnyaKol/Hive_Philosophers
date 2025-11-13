@@ -1,24 +1,32 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   ft_putendl_fd.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: akolupae <akolupae@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/11/01 17:25:40 by akolupae          #+#    #+#             */
-/*   Updated: 2025/11/13 15:01:54 by akolupae         ###   ########.fr       */
+/*   Created: 2025/04/24 17:04:35 by akolupae          #+#    #+#             */
+/*   Updated: 2025/04/24 17:06:38 by akolupae         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-int	main(int argc, char **argv)
+int	ft_putendl_fd(char *s, int fd)
 {
-	if (!check_args(argc, argv))
+	int	i;
+
+	if (s == NULL)
+		return (-1);
+	i = 0;
+	while (s[i] != '\0')
 	{
-		printf("Invalid args\n");
-		return (EXIT_FAILURE);
+		if (write(fd, &s[i], 1) == -1)
+			return (-1);
+		i++;
 	}
-	printf("Good args\n");
-	return (EXIT_SUCCESS);
+	if (write(fd, "\n", 1) == -1)
+		return (-1);
+	i++;
+	return (i);
 }

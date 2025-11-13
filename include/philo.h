@@ -6,7 +6,7 @@
 /*   By: akolupae <akolupae@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/01 17:25:10 by akolupae          #+#    #+#             */
-/*   Updated: 2025/11/01 17:32:17 by akolupae         ###   ########.fr       */
+/*   Updated: 2025/11/13 15:08:33 by akolupae         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,9 @@
 # include "macros.h"
 # include "structs.h"
 
+# include <stdbool.h>
+# include <limits.h>
+# include <stdio.h>
 # include <string.h>
 # include <stdlib.h>
 # include <unistd.h>
@@ -26,6 +29,10 @@
 
 bool	check_args(int argc, char **argv);
 
-/* ===== Memory arena ======================================================= */
+/* -----------  Libft func  ------------------------------------------------- */
+int		ft_atoi(const char *nptr);
+int		ft_isdigit(int c);
+int		ft_putendl_fd(char *s, int fd);
+int		ft_strlen(const char *s);
 
 #endif

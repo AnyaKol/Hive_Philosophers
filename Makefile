@@ -13,16 +13,21 @@
 # ------------  VARS  -------------------------------------------------------- #
 NAME = philo
 CC = cc
-CFLAGS = -Wall -Werror -Wextra -Iinclude -MMD -MP
-
+CFLAGS = -Wall -Werror -Wextra -I$(INCDIR) -MMD -MP
 INCDIR = include
 
+SRCDIR = src
 SRC = \
 	main.c \
 	check_args.c \
+	ft_atoi.c \
+	ft_putendl_fd.c \
+	ft_strlen.c \
+	ft_isdigit.c \
 
 OBJDIR = obj
-OBJ = $(addprefix $(OBJDIR)/, $(SRC:.c=.o))
+OBJ = $(SRC:%.c=$(OBJDIR)/%.o)
+
 DEF = $(OBJ:.o=.d)
 
 # ------------  HEADER  ------------------------------------------------------ #
@@ -37,10 +42,13 @@ all: $(NAME)
 $(OBJDIR):
 	mkdir -p $(OBJDIR)
 
-$(OBJDIR)/%.o: src/%.c
+$(OBJDIR)/%.o: $(SRCDIR)/%.c
 	$(CC) $(CFLAGS) -c $< -o $@
 
-$(NAME): $(OBJDIR) $(OBJ)
+$(OBJDIR)/%.o: $(SRCDIR)/libft_fun/%.c
+	$(CC) $(CFLAGS) -c $< -o $@
+
+$(NAME): $(OBJDIR) $(OBJ) $(HEADER)
 	$(CC) $(OBJ) -o $(NAME)
 
 clean:
@@ -54,6 +62,5 @@ re: fclean all
 # ------------  EXTRA  ------------------------------------------------------- #
 .SECONDARY: $(OBJDIR) $(OBJ)
 .PHONY: all clean fclean re
-#.SILENT:
 
 -include $(DEF)

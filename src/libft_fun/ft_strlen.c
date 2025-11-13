@@ -1,24 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   ft_strlen.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: akolupae <akolupae@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/11/01 17:25:40 by akolupae          #+#    #+#             */
-/*   Updated: 2025/11/13 15:01:54 by akolupae         ###   ########.fr       */
+/*   Created: 2025/04/16 16:56:55 by akolupae          #+#    #+#             */
+/*   Updated: 2025/04/19 14:04:25 by akolupae         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-int	main(int argc, char **argv)
+int	ft_strlen(const char *s)
 {
-	if (!check_args(argc, argv))
+	int	len;
+
+	len = 0;
+	if (s != NULL)
 	{
-		printf("Invalid args\n");
-		return (EXIT_FAILURE);
+		while (s[len] != '\0')
+			len++;
 	}
-	printf("Good args\n");
-	return (EXIT_SUCCESS);
+	return (len);
 }
