@@ -32,6 +32,8 @@ static bool	check_numbers(int argc, char **argv)
 {
 	int	i;
 
+	if (!*argv)
+		return (true);
 	i = 0;
 	while (i < argc && argv[i])
 	{
@@ -42,21 +44,23 @@ static bool	check_numbers(int argc, char **argv)
 	return (true);
 }
 
-static bool	str_is_number(char *args)
+static bool	str_is_number(char *arg)
 {
 	int	i;
 
+	if (!*arg)
+		return (true);
 	i = 0;
-	while (args[i])
+	while (arg[i])
 	{
-		if (args[i] < '0' || args[i] > '9')
+		if (arg[i] < '0' || arg[i] > '9')
 		{
 			ft_putendl_fd(NOTNUM, STDERR_FILENO);
 			return (false);
 		}
 		i++;
 	}
-	if (args[0] && args[0] == '0')
+	if (arg[0] == '0' && arg[1] != '\0')
 	{
 		ft_putendl_fd(WFORMAT, STDERR_FILENO);
 		return (false);
@@ -68,8 +72,10 @@ static bool	int_overflow(char *str)
 {
 	int num;
 
+	if (!*str)
+		return (true);
 	num = ft_atoi(str);
-	if (num == 0 && str[0] != '0')
+	if (num == 0 && !(str[0] == '0' && str[1] == '\0'))
 	{
 		ft_putendl_fd(OVERFLOW, STDERR_FILENO);
 		return (false);
