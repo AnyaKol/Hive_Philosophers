@@ -6,7 +6,7 @@
 /*   By: akolupae <akolupae@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/01 17:25:40 by akolupae          #+#    #+#             */
-/*   Updated: 2025/11/13 15:01:54 by akolupae         ###   ########.fr       */
+/*   Updated: 2025/11/19 18:35:51 by akolupae         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,11 +14,11 @@
 
 int	main(int argc, char **argv)
 {
-	if (!check_args(argc, argv))
-	{
-		printf("Invalid args\n");
+	t_data	data;
+
+	if (!check_args(argc, argv, &data))
 		return (EXIT_FAILURE);
-	}
-	printf("Good args\n");
+	if (!init_data(&data) || !init_threads(&data))
+		return (EXIT_FAILURE);
 	return (EXIT_SUCCESS);
 }

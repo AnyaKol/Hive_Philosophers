@@ -6,61 +6,70 @@
 /*   By: akolupae <akolupae@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/01 18:17:49 by akolupae          #+#    #+#             */
-/*   Updated: 2025/11/13 15:48:06 by akolupae         ###   ########.fr       */
+/*   Updated: 2025/11/19 19:00:18 by akolupae         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-static bool	check_numbers(int argc, char **argv);
-static bool	str_is_number(char *args);
-static bool	int_overflow(char *str);
+static bool	check_numbers(int argnum, char **argv, int *numbers);
+static bool	str_is_number(char *str);
+static bool	int_overflow(int num, char *str);
 
-bool	check_args(int argc, char **argv)
+bool	check_args(int argc, char **argv, t_data *data)
 {
+	int	numbers[5];
+
 	if (argc < 5 || argc > 6)
 	{
 		ft_putendl_fd(ARGNUM, STDERR_FILENO);
 		return (false);
 	}
-	if (!check_numbers(argc - 1, &argv[1]))
+	if (!check_numbers(argc - 1, &argv[1], &numbers[0]))
 		return (false);
+	data->philos_num = numbers[0];
+	data->time_to_die = numbers[1];
+	data->time_to_eat = numbers[2];
+	data->time_to_sleep = numbers[3];
+	data->food_num = numbers[4];
 	return (true);
 }
 
-static bool	check_numbers(int argc, char **argv)
+static bool	check_numbers(int argnum, char **argv, int *numbers)
 {
 	int	i;
 
 	if (!*argv)
 		return (true);
+	numbers[4] = -1;
 	i = 0;
-	while (i < argc && argv[i])
+	while (i < argnum && argv[i])
 	{
-		if (!str_is_number(argv[i]) || !int_overflow(argv[i]))
+		numbers[i] = ft_atoi(argv[i]);
+		if (!str_is_number(argv[i]) || !int_overflow(numbers[i], argv[i]))
 			return (false);
 		i++;
 	}
 	return (true);
 }
 
-static bool	str_is_number(char *arg)
+static bool	str_is_number(char *str)
 {
 	int	i;
 
-	if (!*arg)
+	if (!*str)
 		return (true);
 	i = 0;
-	while (arg[i])
+	while (str[i])
 	{
-		if (arg[i] < '0' || arg[i] > '9')
+		if (str[i] < '0' || str[i] > '9')
 		{
 			ft_putendl_fd(NOTNUM, STDERR_FILENO);
 			return (false);
 		}
 		i++;
 	}
-	if (arg[0] == '0' && arg[1] != '\0')
+	if (str[0] == '0' && str[1] != '\0')
 	{
 		ft_putendl_fd(WFORMAT, STDERR_FILENO);
 		return (false);
@@ -68,13 +77,10 @@ static bool	str_is_number(char *arg)
 	return (true);
 }
 
-static bool	int_overflow(char *str)
+static bool	int_overflow(int num, char *str)
 {
-	int num;
-
 	if (!*str)
 		return (true);
-	num = ft_atoi(str);
 	if (num == 0 && !(str[0] == '0' && str[1] == '\0'))
 	{
 		ft_putendl_fd(OVERFLOW, STDERR_FILENO);

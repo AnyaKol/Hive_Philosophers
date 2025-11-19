@@ -1,34 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   structs.h                                          :+:      :+:    :+:   */
+/*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: akolupae <akolupae@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/11/01 17:25:23 by akolupae          #+#    #+#             */
-/*   Updated: 2025/11/19 19:05:07 by akolupae         ###   ########.fr       */
+/*   Created: 2025/11/19 18:33:41 by akolupae          #+#    #+#             */
+/*   Updated: 2025/11/19 18:36:31 by akolupae         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef STRUCTS_H
-# define STRUCTS_H
+#include "philo.h"
 
-/* ================ TOKEN =================================================== */
-typedef struct s_data
+bool	init_data(t_data *data)
 {
-	int				philos_num;
-	int				time_to_die;
-	int				time_to_eat;
-	int				time_to_sleep;
-	int				food_num;
-	pthread_t		*philos;
-	pthread_t		*forks;
-	pthread_mutex_t	print;
-}	t_data;
-/*
-typedef struct s_philo
+	
+	return (true);
+}
+
+bool	init_threads(t_data *data)
 {
-	pthread_t		thread;
-}	t_philo;
-*/
-#endif
+	return (true);
+}

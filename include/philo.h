@@ -6,15 +6,12 @@
 /*   By: akolupae <akolupae@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/01 17:25:10 by akolupae          #+#    #+#             */
-/*   Updated: 2025/11/13 15:08:33 by akolupae         ###   ########.fr       */
+/*   Updated: 2025/11/19 19:00:45 by akolupae         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef PHILO_H
 # define PHILO_H
-
-# include "macros.h"
-# include "structs.h"
 
 # include <stdbool.h>
 # include <limits.h>
@@ -25,9 +22,13 @@
 # include <sys/time.h>
 # include <pthread.h>
 
-//extern volatile sig_atomic_t	g_last_sig;
+# include "macros.h"
+# include "structs.h"
 
-bool	check_args(int argc, char **argv);
+bool	check_args(int argc, char **argv, t_data *data);
+bool	init_data(t_data *data);
+bool	init_threads(t_data *data);
+
 
 /* -----------  Libft func  ------------------------------------------------- */
 int		ft_atoi(const char *nptr);
