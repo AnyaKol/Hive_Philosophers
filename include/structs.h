@@ -16,19 +16,31 @@
 /* ================ TOKEN =================================================== */
 typedef struct s_data
 {
-	int				philos_num;
+	int			philos_num;
+	pthread_t	*philos;
+	t_fork		*forks;
+}	t_data;
+
+
+typedef struct s_args
+{
 	int				time_to_die;
 	int				time_to_eat;
 	int				time_to_sleep;
 	int				food_num;
-	pthread_t		*philos;
-	pthread_t		*forks;
 	pthread_mutex_t	print;
-}	t_data;
-/*
+}	t_args;
+
 typedef struct s_philo
 {
-	pthread_t		thread;
+	t_args 	*args;
+	t_fork	*fork[2];
 }	t_philo;
-*/
+
+typedef struct s_fork
+{
+	bool			avail;
+	pthread_mutex_t	*take_fork;
+}	t_fork;
+
 #endif
