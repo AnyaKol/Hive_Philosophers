@@ -19,8 +19,14 @@ typedef struct s_data
 	int			philos_num;
 	pthread_t	*philos;
 	t_fork		*forks;
+	s_args		args;
 }	t_data;
 
+typedef struct s_fork
+{
+	bool			avail;
+	pthread_mutex_t	take_fork;
+}	t_fork;
 
 typedef struct s_args
 {
@@ -33,14 +39,9 @@ typedef struct s_args
 
 typedef struct s_philo
 {
+	int		index;
 	t_args 	*args;
 	t_fork	*fork[2];
 }	t_philo;
-
-typedef struct s_fork
-{
-	bool			avail;
-	pthread_mutex_t	*take_fork;
-}	t_fork;
 
 #endif
