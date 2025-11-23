@@ -28,10 +28,11 @@ bool	check_args(int argc, char **argv, t_data *data)
 	if (!check_numbers(argc - 1, &argv[1], &numbers[0]))
 		return (false);
 	data->philos_num = numbers[0];
-	data->time_to_die = numbers[1];
-	data->time_to_eat = numbers[2];
-	data->time_to_sleep = numbers[3];
-	data->food_num = numbers[4];
+	data->args.time_to_die = numbers[1];
+	data->args.time_to_eat = numbers[2];
+	data->args.time_to_sleep = numbers[3];
+	data->args.food_num = numbers[4];
+	data->args.start_time = get_time_millisec();
 	return (true);
 }
 
@@ -84,6 +85,11 @@ static bool	int_overflow(int num, char *str)
 	if (num == 0 && !(str[0] == '0' && str[1] == '\0'))
 	{
 		ft_putendl_fd(OVERFLOW, STDERR_FILENO);
+		return (false);
+	}
+	else if (num == 0)
+	{
+		ft_putendl_fd(ARGZERO, STDERR_FILENO);
 		return (false);
 	}
 	return (true);

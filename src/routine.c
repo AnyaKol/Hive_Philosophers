@@ -12,29 +12,85 @@
 
 #include "philo.h"
 
+static bool	take_fork(t_fork *fork, t_philo philo);
+static bool	start_eating(t_philo *philo);
+static bool	start_sleeping(t_philo philo);
+static bool	check_death(int cur_time, t_philo philo);
+
 void	*routine(void *ptr)
 {
 	t_philo	*philo;
 
 	philo = (t_philo *)ptr;
-	if (fork[0]->avail)
-		take_fork(fork[0], philo->args->print);
-	if (fork[1]->avail)
-		take_fork(fork[0], &philo->args->print, philo->index);
-	start_eating(philo->args->print);
+	while (1)
+	{
+		if (!take_fork(philo->fork[0], *philo)
+			|| !take_fork(philo->fork[1], *philo))
+			break ;
+		if (!start_eating(philo))
+			break ;
+		set_value(&philo->fork[0]->take_fork, &philo->fork[0]->avail, true);
+		set_value(&philo->fork[1]->take_fork, &philo->fork[1]->avail, true);
+		if (!start_sleeping(*philo))
+			break ;
+	}
+	if (!philo->args->finish)
+	{
+		print_message(*philo, "died\n");
+		set_value(&philo->args->finish_lock, &philo->args->finish, true);
+	}
+	return (NULL);
 }
 
-void	take_fork(t_fork *fork, pthread_mutex_t *print, int index)
+static bool	take_fork(t_fork *fork, t_philo philo)
 {
-	//lock fork
-	fork->avail = false;
-	//unlock fork
-	print_message(index,"took fork\n", print);
+	if (philo.args->finish)
+		return (false);
+	if (!fork->avail)
+	{
+		if (!print_message(philo, "is thinking\n"))
+			return (false);
+		while (!fork->avail)
+		{
+			if (!check_death(get_time_millisec(), philo))
+				return (false);
+		}
+	}
+	set_value(&fork->take_fork, &fork->avail, false);
+	return (print_message(philo,"has taken a fork\n"));
 }
 
-void	print_message(int index, char *msg, pthread_mutex_t *print)
+static bool	start_eating(t_philo *philo)
 {
-	//lock print
-	printf("%d %s", index, msg);
-	//unlock print
+	if (philo->args->finish)
+		return (false);
+	if (!check_death(get_time_millisec() + philo->args->time_to_eat, *philo))
+		return (false);
+	if (!print_message(*philo, "is eating\n"))
+		return (false);
+	usleep(philo->args->time_to_eat * 1000);
+	philo->last_meal = get_time_millisec();
+	return (true);
+}
+
+static bool	start_sleeping(t_philo philo)
+{
+	if (philo.args->finish)
+		return (false);
+	if (!check_death(get_time_millisec() + philo.args->time_to_sleep, philo))
+		return (false);
+	if (!print_message(philo, "is sleeping\n"))
+		return (false);
+	usleep(philo.args->time_to_sleep * 1000);
+	return (true);
+}
+
+static bool	check_death(int cur_time, t_philo philo)
+{
+	int	time_passed;
+
+	time_passed = cur_time - philo.last_meal;
+	if (time_passed >= philo.args->time_to_die)
+		return (false);
+	return (true);
 }

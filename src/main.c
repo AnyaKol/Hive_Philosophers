@@ -16,9 +16,13 @@ int	main(int argc, char **argv)
 {
 	t_data	data;
 
+	memset(&data, 0, sizeof(data));
 	if (!check_args(argc, argv, &data))
 		return (EXIT_FAILURE);
-	if (!init_threads(&data))
+	if (!init_data(&data) || !init_threads(&data))
 		return (EXIT_FAILURE);
+	pthread_join(data.philos[0], NULL);
 	return (EXIT_SUCCESS);
 }
+
+

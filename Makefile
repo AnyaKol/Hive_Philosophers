@@ -21,7 +21,9 @@ SRC = \
 	main.c \
 	check_args.c \
 	init.c \
+	free.c \
 	routine.c \
+	utils.c \
 	ft_atoi.c \
 	ft_putendl_fd.c \
 	ft_strlen.c \
