@@ -45,8 +45,8 @@ static void	destroy_mutex(t_data *data)
 	}
 	if (pthread_mutex_destroy(&data->args.finish_lock) != SUCCESS
 		|| pthread_mutex_destroy(&data->args.print) != SUCCESS)
-		{
-			perror("pthread_mutex_destroy");
-			return ;
-		}
+	{
+		perror("pthread_mutex_destroy");
+		return ;
+	}
 }

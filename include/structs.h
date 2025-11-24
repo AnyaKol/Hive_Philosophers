@@ -43,7 +43,7 @@ typedef struct s_philo
 {
 	int		index;
 	int		last_meal;
-	t_args 	*args;
+	t_args	*args;
 	t_fork	*fork[2];
 }	t_philo;
 

@@ -19,9 +19,7 @@ int	main(int argc, char **argv)
 	memset(&data, 0, sizeof(data));
 	if (!check_args(argc, argv, &data))
 		return (EXIT_FAILURE);
-	if (!init_data(&data) || !init_threads(&data))
+	if (!init_data(&data) || !init_threads(&data) || !join_threads(&data))
 		return (EXIT_FAILURE);
 	return (EXIT_SUCCESS);
 }
-
-

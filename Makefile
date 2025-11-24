@@ -20,7 +20,8 @@ SRCDIR = src
 SRC = \
 	main.c \
 	check_args.c \
-	init.c \
+	init_data.c \
+	init_threads.c \
 	free.c \
 	routine.c \
 	utils.c \

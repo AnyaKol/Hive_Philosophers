@@ -17,11 +17,12 @@
 # define EXIT_SUCCESS 0
 # define FAILURE -1
 # define SUCCESS 0
+# define TIMEOUT 1000
 
-# define ARGNUM "Error: Wrong number of arguments\n"
-# define NOTNUM "Error: Arguments not numerical\n"
-# define WFORMAT "Error: Wrong number format\n"
-# define OVERFLOW "Error: Number exceeds INT_MAX\n"
-# define ARGZERO "Error: Argument cannot be zero\n"
+# define ARGNUM "Error: Wrong number of arguments"
+# define NOTNUM "Error: Arguments not numerical"
+# define WFORMAT "Error: Wrong number format"
+# define OVERFLOW "Error: Number exceeds INT_MAX"
+# define ARGZERO "Error: Argument cannot be zero"
 
 #endif

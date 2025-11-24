@@ -24,20 +24,15 @@ void	*routine(void *ptr)
 
 	philo = (t_philo *)ptr;
 	eat_count = 0;
-	if (philo->args->food_num != 0)
+	while (eat_count != philo->args->food_num)
 	{
-		while (1)
-		{
-			if (!take_fork(philo->fork[0], *philo)
-				|| !take_fork(philo->fork[1], *philo))
-				break ;
-			if (!start_eating(philo))
-				break ;
-			if (++eat_count == philo->args->food_num)
-				break ;
-			if (!start_sleeping(*philo))
-				break ;
-		}
+		if (!take_fork(philo->fork[0], *philo)
+			|| !take_fork(philo->fork[1], *philo))
+			break ;
+		if (!start_eating(philo) || ++eat_count == philo->args->food_num)
+			break ;
+		if (!start_sleeping(*philo))
+			break ;
 	}
 	if (!philo->args->finish && eat_count != philo->args->food_num)
 	{
@@ -63,7 +58,7 @@ static bool	take_fork(t_fork *fork, t_philo philo)
 		}
 	}
 	set_value(&fork->take_fork, &fork->avail, false);
-	return (print_message(philo,"has taken a fork\n"));
+	return (print_message(philo, "has taken a fork\n"));
 }
 
 static bool	start_eating(t_philo *philo)

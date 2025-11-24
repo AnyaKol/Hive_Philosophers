@@ -12,7 +12,7 @@
 
 #include "philo.h"
 
-int	get_time_millisec()
+int	get_time_millisec(void)
 {
 	struct timeval	time;
 	int				millisec;
@@ -55,5 +55,22 @@ bool	print_message(t_philo philo, char *msg)
 		return (false);
 	}
 	pthread_mutex_unlock(&philo.args->print);
+	return (true);
+}
+
+bool	join_threads(t_data *data)
+{
+	int	i;
+
+	i = 0;
+	while (i < data->philos_num)
+	{
+		if (pthread_join(data->philos[i], NULL) != SUCCESS)
+		{
+			perror("pthread_join");
+			return (false);
+		}
+		i++;
+	}
 	return (true);
 }

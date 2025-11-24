@@ -30,10 +30,10 @@ bool	init_data(t_data *data);
 bool	init_threads(t_data *data);
 void	free_data(t_data *data);
 void	*routine(void *ptr);
-int	    get_time_millisec();
+int		get_time_millisec(void);
 void	set_value(pthread_mutex_t *mutex, bool *var, bool value);
 bool	print_message(t_philo philo, char *msg);
-
+bool	join_threads(t_data *data);
 
 /* -----------  Libft func  ------------------------------------------------- */
 int		ft_atoi(const char *nptr);
