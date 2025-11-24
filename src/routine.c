@@ -6,7 +6,7 @@
 /*   By: akolupae <akolupae@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/17 18:32:53 by akolupae          #+#    #+#             */
-/*   Updated: 2025/11/24 19:01:04 by akolupae         ###   ########.fr       */
+/*   Updated: 2025/11/24 19:23:29 by akolupae         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,19 +20,26 @@ static bool	check_death(int cur_time, t_philo philo);
 void	*routine(void *ptr)
 {
 	t_philo	*philo;
+	int		eat_count;
 
 	philo = (t_philo *)ptr;
-	while (1)
+	eat_count = 0;
+	if (philo->args->food_num != 0)
 	{
-		if (!take_fork(philo->fork[0], *philo)
-			|| !take_fork(philo->fork[1], *philo))
-			break ;
-		if (!start_eating(philo))
-			break ;
-		if (!start_sleeping(*philo))
-			break ;
+		while (1)
+		{
+			if (!take_fork(philo->fork[0], *philo)
+				|| !take_fork(philo->fork[1], *philo))
+				break ;
+			if (!start_eating(philo))
+				break ;
+			if (++eat_count == philo->args->food_num)
+				break ;
+			if (!start_sleeping(*philo))
+				break ;
+		}
 	}
-	if (!philo->args->finish)
+	if (!philo->args->finish && eat_count != philo->args->food_num)
 	{
 		print_message(*philo, "died\n");
 		set_value(&philo->args->finish_lock, &philo->args->finish, true);
