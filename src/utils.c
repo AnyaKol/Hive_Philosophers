@@ -1,3 +1,14 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   utils.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: akolupae <akolupae@student.hive.fi>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/11/24 16:38:39 by akolupae          #+#    #+#             */
+/*   Updated: 2025/11/24 18:45:07 by akolupae         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include "philo.h"
 
@@ -29,11 +40,14 @@ bool	print_message(t_philo philo, char *msg)
 
 	if (philo.args->finish)
 		return (false);
+	pthread_mutex_lock(&philo.args->print);
 	cur_time = get_time_millisec();
 	if (cur_time == FAILURE)
+	{
+		pthread_mutex_unlock(&philo.args->print);
 		return (false);
+	}
 	time = cur_time - philo.args->start_time;
-	pthread_mutex_lock(&philo.args->print);
 	if (printf("%d %d %s", time, philo.index, msg) == FAILURE)
 	{
 		pthread_mutex_unlock(&philo.args->print);

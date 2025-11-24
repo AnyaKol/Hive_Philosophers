@@ -6,7 +6,7 @@
 /*   By: akolupae <akolupae@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/01 17:25:40 by akolupae          #+#    #+#             */
-/*   Updated: 2025/11/19 18:35:51 by akolupae         ###   ########.fr       */
+/*   Updated: 2025/11/24 17:36:00 by akolupae         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,6 @@ int	main(int argc, char **argv)
 		return (EXIT_FAILURE);
 	if (!init_data(&data) || !init_threads(&data))
 		return (EXIT_FAILURE);
-	pthread_join(data.philos[0], NULL);
 	return (EXIT_SUCCESS);
 }
 

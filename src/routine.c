@@ -6,7 +6,7 @@
 /*   By: akolupae <akolupae@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/17 18:32:53 by akolupae          #+#    #+#             */
-/*   Updated: 2025/11/21 14:11:34 by akolupae         ###   ########.fr       */
+/*   Updated: 2025/11/24 19:01:04 by akolupae         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,8 +29,6 @@ void	*routine(void *ptr)
 			break ;
 		if (!start_eating(philo))
 			break ;
-		set_value(&philo->fork[0]->take_fork, &philo->fork[0]->avail, true);
-		set_value(&philo->fork[1]->take_fork, &philo->fork[1]->avail, true);
 		if (!start_sleeping(*philo))
 			break ;
 	}
@@ -39,6 +37,7 @@ void	*routine(void *ptr)
 		print_message(*philo, "died\n");
 		set_value(&philo->args->finish_lock, &philo->args->finish, true);
 	}
+	free(philo);
 	return (NULL);
 }
 
@@ -70,6 +69,8 @@ static bool	start_eating(t_philo *philo)
 		return (false);
 	usleep(philo->args->time_to_eat * 1000);
 	philo->last_meal = get_time_millisec();
+	set_value(&philo->fork[0]->take_fork, &philo->fork[0]->avail, true);
+	set_value(&philo->fork[1]->take_fork, &philo->fork[1]->avail, true);
 	return (true);
 }
 
@@ -77,11 +78,13 @@ static bool	start_sleeping(t_philo philo)
 {
 	if (philo.args->finish)
 		return (false);
-	if (!check_death(get_time_millisec() + philo.args->time_to_sleep, philo))
-		return (false);
 	if (!print_message(philo, "is sleeping\n"))
 		return (false);
-	usleep(philo.args->time_to_sleep * 1000);
+	while (get_time_millisec() - philo.last_meal < philo.args->time_to_sleep)
+	{
+		if (!check_death(get_time_millisec(), philo))
+			return (false);
+	}
 	return (true);
 }
 
