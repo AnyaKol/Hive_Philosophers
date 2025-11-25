@@ -6,7 +6,7 @@
 #    By: akolupae <akolupae@student.hive.fi>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/11/01 17:23:31 by akolupae          #+#    #+#              #
-#    Updated: 2025/11/25 10:48:26 by akolupae         ###   ########.fr        #
+#    Updated: 2025/11/25 19:29:44 by akolupae         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -20,6 +20,7 @@ SRCDIR = src
 SRC = \
 	main.c \
 	check_args.c \
+	init.c \
 
 OBJDIR = obj
 OBJ = $(SRC:%.c=$(OBJDIR)/%.o)

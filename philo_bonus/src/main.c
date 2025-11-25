@@ -19,7 +19,7 @@ int	main(int argc, char **argv)
 	memset(&data, 0, sizeof(data));
 	if (!check_args(argc, argv, &data))
 		return (EXIT_FAILURE);
-	if (!init_data(&data))
+	if (!init(&data.args, (unsigned int) data.philos_num))
 		return (EXIT_FAILURE);
 	return (EXIT_SUCCESS);
 }
