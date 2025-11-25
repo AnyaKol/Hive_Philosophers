@@ -6,7 +6,7 @@
 /*   By: akolupae <akolupae@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/01 17:25:10 by akolupae          #+#    #+#             */
-/*   Updated: 2025/11/25 10:48:01 by akolupae         ###   ########.fr       */
+/*   Updated: 2025/11/25 11:23:46 by akolupae         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,8 @@
 # include <stdlib.h>
 # include <unistd.h>
 # include <sys/time.h>
+# include <signal.h>
+# include <semaphore.h>
 
 # include "macros_bonus.h"
 # include "structs_bonus.h"

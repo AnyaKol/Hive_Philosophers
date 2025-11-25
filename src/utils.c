@@ -6,7 +6,7 @@
 /*   By: akolupae <akolupae@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/24 16:38:39 by akolupae          #+#    #+#             */
-/*   Updated: 2025/11/24 18:45:07 by akolupae         ###   ########.fr       */
+/*   Updated: 2025/11/25 14:23:41 by akolupae         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,9 +38,12 @@ bool	print_message(t_philo philo, char *msg)
 	int	time;
 	int	cur_time;
 
-	if (philo.args->finish)
-		return (false);
 	pthread_mutex_lock(&philo.args->print);
+	if (philo.args->finish)
+	{
+		pthread_mutex_unlock(&philo.args->print);
+		return (false);
+	}
 	cur_time = get_time_millisec();
 	if (cur_time == FAILURE)
 	{
