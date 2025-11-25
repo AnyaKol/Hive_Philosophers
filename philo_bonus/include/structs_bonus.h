@@ -13,11 +13,6 @@
 #ifndef STRUCTS_BONUS_H
 # define STRUCTS_BONUS_H
 
-typedef struct s_fork
-{
-	bool			avail;
-}	t_fork;
-
 typedef struct s_args
 {
 	int				time_to_die;
@@ -31,7 +26,6 @@ typedef struct s_args
 typedef struct s_data
 {
 	int			philos_num;
-	t_fork		*forks;
 	t_args		args;
 }	t_data;
 
@@ -40,7 +34,6 @@ typedef struct s_philo
 	int		index;
 	int		last_meal;
 	t_args	*args;
-	t_fork	*fork[2];
 }	t_philo;
 
 #endif
