@@ -1,18 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_isdigit.c                                       :+:      :+:    :+:   */
+/*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: akolupae <akolupae@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/15 11:13:25 by akolupae          #+#    #+#             */
-/*   Updated: 2025/04/15 11:16:49 by akolupae         ###   ########.fr       */
+/*   Created: 2025/11/01 17:25:40 by akolupae          #+#    #+#             */
+/*   Updated: 2025/11/25 10:47:30 by akolupae         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "philo.h"
+#include "philo_bonus.h"
 
-bool	ft_isdigit(int c)
+int	main(int argc, char **argv)
 {
-	return ((unsigned char) c >= '0' && (unsigned char) c <= '9');
+	t_data	data;
+
+	memset(&data, 0, sizeof(data));
+	if (!check_args(argc, argv, &data))
+		return (EXIT_FAILURE);
+	if (!init_data(&data))
+		return (EXIT_FAILURE);
+	return (EXIT_SUCCESS);
 }

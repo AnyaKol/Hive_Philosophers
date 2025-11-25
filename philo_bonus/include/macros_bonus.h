@@ -1,18 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_isdigit.c                                       :+:      :+:    :+:   */
+/*   macros_bonus.h                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: akolupae <akolupae@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/15 11:13:25 by akolupae          #+#    #+#             */
-/*   Updated: 2025/04/15 11:16:49 by akolupae         ###   ########.fr       */
+/*   Created: 2025/11/01 17:24:51 by akolupae          #+#    #+#             */
+/*   Updated: 2025/11/25 10:46:17 by akolupae         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "philo.h"
+#ifndef MACROS_BONUS_H
+# define MACROS_BONUS_H
 
-bool	ft_isdigit(int c)
-{
-	return ((unsigned char) c >= '0' && (unsigned char) c <= '9');
-}
+# define EXIT_FAILURE 1
+# define EXIT_SUCCESS 0
+# define FAILURE -1
+# define SUCCESS 0
+
+# define ARGNUM "Error: Wrong number of arguments"
+# define NOTNUM "Error: Arguments not numerical"
+# define WFORMAT "Error: Wrong number format"
+# define OVERFLOW "Error: Number exceeds INT_MAX"
+# define ARGZERO "Error: Argument cannot be zero"
+
+#endif

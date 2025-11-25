@@ -6,11 +6,11 @@
 /*   By: akolupae <akolupae@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/01 18:17:49 by akolupae          #+#    #+#             */
-/*   Updated: 2025/11/19 19:00:18 by akolupae         ###   ########.fr       */
+/*   Updated: 2025/11/25 10:49:04 by akolupae         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "philo.h"
+#include "philo_bonus.h"
 
 static bool	check_numbers(int argnum, char **argv, int *numbers);
 static bool	str_is_number(char *str);

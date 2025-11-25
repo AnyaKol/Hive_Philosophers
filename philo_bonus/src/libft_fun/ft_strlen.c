@@ -1,18 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_isdigit.c                                       :+:      :+:    :+:   */
+/*   ft_strlen.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: akolupae <akolupae@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/15 11:13:25 by akolupae          #+#    #+#             */
-/*   Updated: 2025/04/15 11:16:49 by akolupae         ###   ########.fr       */
+/*   Created: 2025/04/16 16:56:55 by akolupae          #+#    #+#             */
+/*   Updated: 2025/04/19 14:04:25 by akolupae         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-bool	ft_isdigit(int c)
+int	ft_strlen(const char *s)
 {
-	return ((unsigned char) c >= '0' && (unsigned char) c <= '9');
+	int	len;
+
+	len = 0;
+	if (s != NULL)
+	{
+		while (s[len] != '\0')
+			len++;
+	}
+	return (len);
 }

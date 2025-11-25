@@ -1,18 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_isdigit.c                                       :+:      :+:    :+:   */
+/*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: akolupae <akolupae@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/15 11:13:25 by akolupae          #+#    #+#             */
-/*   Updated: 2025/04/15 11:16:49 by akolupae         ###   ########.fr       */
+/*   Created: 2025/11/24 16:38:39 by akolupae          #+#    #+#             */
+/*   Updated: 2025/11/25 10:50:02 by akolupae         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "philo.h"
+#include "philo_bonus.h"
 
-bool	ft_isdigit(int c)
+int	get_time_millisec(void)
 {
-	return ((unsigned char) c >= '0' && (unsigned char) c <= '9');
+	struct timeval	time;
+	int				millisec;
+
+	if (gettimeofday(&time, NULL) == FAILURE)
+	{
+		perror("gettimeofday");
+		return (FAILURE);
+	}
+	millisec = (int) time.tv_sec * 1000 + (int) time.tv_usec / 1000;
+	return (millisec);
 }
