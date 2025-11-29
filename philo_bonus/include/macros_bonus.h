@@ -17,7 +17,7 @@
 # define EXIT_SUCCESS 0
 # define FAILURE -1
 # define SUCCESS 0
-# define SEM_FORK_NUM "/fork_num"
+# define SEM_FORKS_NUM "/forks_num"
 # define SEM_PRINT "/print"
 
 # define ARGNUM "Error: Wrong number of arguments"

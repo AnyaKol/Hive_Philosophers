@@ -6,7 +6,7 @@
 /*   By: akolupae <akolupae@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/01 17:25:23 by akolupae          #+#    #+#             */
-/*   Updated: 2025/11/25 10:46:55 by akolupae         ###   ########.fr       */
+/*   Updated: 2025/11/29 16:01:25 by akolupae         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,14 +21,15 @@ typedef struct s_args
 	int				food_num;
 	int				start_time;
 	bool			finish;
-	sem_t			*fork_num;
-	sem_t			print;
+	sem_t			*forks_num;
+	sem_t			*print;
 }	t_args;
 
 typedef struct s_data
 {
-	int			philos_num;
-	t_args		args;
+	int		philos_num;
+	pid_t	*pids;
+	t_args	args;
 }	t_data;
 
 typedef struct s_philo

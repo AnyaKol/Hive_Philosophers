@@ -6,7 +6,7 @@
 #    By: akolupae <akolupae@student.hive.fi>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/11/01 17:23:31 by akolupae          #+#    #+#              #
-#    Updated: 2025/11/25 19:29:44 by akolupae         ###   ########.fr        #
+#    Updated: 2025/11/29 19:34:29 by akolupae         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -20,7 +20,13 @@ SRCDIR = src
 SRC = \
 	main.c \
 	check_args.c \
-	init.c \
+	routine.c \
+	semaphore.c \
+	utils.c \
+	ft_atoi.c \
+	ft_putendl_fd.c \
+	ft_strlen.c \
+	ft_isdigit.c \
 
 OBJDIR = obj
 OBJ = $(SRC:%.c=$(OBJDIR)/%.o)
