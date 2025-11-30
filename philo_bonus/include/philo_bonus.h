@@ -25,6 +25,7 @@
 # include <fcntl.h>
 # include <sys/stat.h>
 # include <semaphore.h>
+# include <pthread.h>
 
 # include "macros_bonus.h"
 # include "structs_bonus.h"
@@ -32,11 +33,15 @@
 bool	check_args(int argc, char **argv, t_data *data);
 bool	init_sem(t_args *args, unsigned int philos_num);
 void	unlink_sem(void);
+void	post_all_philo_sems(t_philo *philo);
+void	post_philo_sem(sem_t *sem, bool *taken);
 bool	fork_philos(t_data data);
-void	routine(t_philo philo);
 void	wait_for_philos(t_data data);
+void	routine(t_philo philo);
+void	set_death_check(t_philo *philo);
+bool	check_death(int cur_time, t_philo philo);
 int		get_time_millisec(void);
-bool	print_message(t_philo philo, char *msg);
+bool	print_message(t_philo *philo, char *msg);
 
 /* -----------  Libft func  ------------------------------------------------- */
 int		ft_atoi(const char *nptr);

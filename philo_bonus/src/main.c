@@ -41,11 +41,14 @@ bool	fork_philos(t_data data)
 
 	i = 0;
 	philo.args = &data.args;
+	philo.sems[0] = false;
+	philo.sems[1] = false;
+	philo.sems[2] = false;
 	while (i < data.philos_num)
 	{
 		philo.index = i + 1;
 		philo.last_meal = get_time_millisec();
-		printf("Fork %d\n", i);//
+		printf("Fork %d\n", i);//REMOVE
 		pid = fork();
 		if (pid < 0)
 		{
@@ -67,8 +70,9 @@ void	wait_for_philos(t_data data)
 	i = 0;
 	while (i < data.philos_num)
 	{
-		printf("Wait %d\n", i);//
+		printf("Wait %d\n", i);//REMOVE
 		waitpid(-1, &status, 0);
+		printf("Status: %d\n", status);//REMOVE
 		if (status == EXIT_FAILURE)
 		{
 			if (kill(0, SIGTERM) == FAILURE)

@@ -6,7 +6,7 @@
 /*   By: akolupae <akolupae@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/19 18:33:41 by akolupae          #+#    #+#             */
-/*   Updated: 2025/11/29 18:06:20 by akolupae         ###   ########.fr       */
+/*   Updated: 2025/11/30 20:07:28 by akolupae         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,12 +16,12 @@ static bool	open_and_close(sem_t *sem, const char *name, unsigned int value);
 
 bool	init_sem(t_args *args, unsigned int philos_num)
 {
-	if (!open_and_close(args->forks_num, SEM_FORKS_NUM, philos_num - 1))
+	if (!open_and_close(&args->forks_num, SEM_FORKS_NUM, philos_num))
 	{
 		unlink_sem();
 		return (false);
 	}
-	if (!open_and_close(args->print, SEM_PRINT, 0))
+	if (!open_and_close(&args->print, SEM_PRINT, 1))
 	{
 		unlink_sem();
 		return (false);
@@ -31,6 +31,7 @@ bool	init_sem(t_args *args, unsigned int philos_num)
 
 static bool	open_and_close(sem_t *sem, const char *name, unsigned int value)
 {
+	sem_unlink(name);
 	sem = sem_open(name, O_CREAT, O_RDONLY, value);
 	if (sem == SEM_FAILED)
 	{
@@ -51,4 +52,21 @@ void	unlink_sem(void)
 		perror("sem_unlink");
 	if (sem_unlink(SEM_PRINT) == FAILURE)
 		perror("sem_unlink");
+}
+
+void	post_all_philo_sems(t_philo *philo)
+{
+	post_philo_sem(&philo->args->forks_num, &philo->sems[0]);
+	post_philo_sem(&philo->args->forks_num, &philo->sems[1]);
+	post_philo_sem(&philo->args->print, &philo->sems[2]);
+}
+
+void	post_philo_sem(sem_t *sem, bool *taken)
+{
+	if (*taken)
+	{
+		if (sem_post(sem) == FAILURE)
+			perror("sem_post");
+		*taken = false;
+	}
 }

@@ -21,8 +21,8 @@ typedef struct s_args
 	int				food_num;
 	int				start_time;
 	bool			finish;
-	sem_t			*forks_num;
-	sem_t			*print;
+	sem_t			forks_num;
+	sem_t			print;
 }	t_args;
 
 typedef struct s_data
@@ -34,9 +34,11 @@ typedef struct s_data
 
 typedef struct s_philo
 {
-	int		index;
-	int		last_meal;
-	t_args	*args;
+	int			index;
+	int			last_meal;
+	bool		sems[3];
+	pthread_t	thread;
+	t_args		*args;
 }	t_philo;
 
 #endif

@@ -26,28 +26,26 @@ int	get_time_millisec(void)
 	return (millisec);
 }
 
-bool	print_message(t_philo philo, char *msg)
+bool	print_message(t_philo *philo, char *msg)
 {
 	int	time;
 	int	cur_time;
 
-	sem_wait(philo.args->print);
+	sem_wait(&philo->args->print);
+	philo->sems[2] = true;
 	cur_time = get_time_millisec();
 	if (cur_time == FAILURE)
 	{
-		if (sem_post(philo.args->print) == FAILURE)
-			perror("sem_post");
+		post_philo_sem(&philo->args->print, &philo->sems[2]);
 		return (false);
 	}
-	time = cur_time - philo.args->start_time;
-	if (printf("%d %d %s", time, philo.index, msg) == FAILURE)
+	time = cur_time - philo->args->start_time;
+	if (printf("%d %d %s", time, philo->index, msg) == FAILURE)
 	{
 		perror("printf");
-		if (sem_post(philo.args->print) == FAILURE)
-			perror("sem_post");
+		post_philo_sem(&philo->args->print, &philo->sems[2]);
 		return (false);
 	}
-	if (sem_post(philo.args->print) == FAILURE)
-		perror("sem_post");
+	post_philo_sem(&philo->args->print, &philo->sems[2]);
 	return (true);
 }

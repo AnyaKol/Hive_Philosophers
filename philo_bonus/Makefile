@@ -21,6 +21,7 @@ SRC = \
 	main.c \
 	check_args.c \
 	routine.c \
+	death_check.c \
 	semaphore.c \
 	utils.c \
 	ft_atoi.c \
