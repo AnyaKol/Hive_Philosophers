@@ -25,10 +25,7 @@ bool	init_threads(t_data *data)
 	while (i < data->philos_num)
 	{
 		if (!init_one_philo(data, i))
-		{
-			free_data(data);
 			return (false);
-		}
 		i += 2;
 	}
 	wait_for_philos(data);
@@ -36,10 +33,7 @@ bool	init_threads(t_data *data)
 	while (i < data->philos_num)
 	{
 		if (!init_one_philo(data, i))
-		{
-			free_data(data);
 			return (false);
-		}
 		i += 2;
 	}
 	return (true);

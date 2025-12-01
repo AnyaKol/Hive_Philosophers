@@ -58,6 +58,8 @@ void	unlink_sem(void)
 
 void	clean_up(t_data data)
 {
+	if (data.pids)
+		free(data.pids);
 	if (sem_close(data.args.take_forks) == FAILURE)
 		perror("sem_close");
 	if (sem_close(data.args.forks_num) == FAILURE)
@@ -65,5 +67,4 @@ void	clean_up(t_data data)
 	if (sem_close(data.args.print) == FAILURE)
 		perror("sem_close");
 	unlink_sem();
-	free(data.pids);
 }
