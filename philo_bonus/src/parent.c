@@ -12,17 +12,15 @@
 
 #include "philo_bonus.h"
 
+static void	set_philo_init_state(t_philo *philo, t_args *args);
+
 bool	fork_philos(t_data data)
 {
 	int		i;
 	t_philo	philo;
 
 	i = 0;
-	philo.args = &data.args;
-	philo.sems[TAKE_FORKS] = false;
-	philo.sems[FORK_1] = false;
-	philo.sems[FORK_2] = false;
-	philo.sems[PRINT] = false;
+	set_philo_init_state(&philo, &data.args);
 	while (i < data.philos_num)
 	{
 		philo.index = i + 1;
@@ -41,6 +39,15 @@ bool	fork_philos(t_data data)
 		i++;
 	}
 	return (true);
+}
+
+static void	set_philo_init_state(t_philo *philo, t_args *args)
+{
+	philo->args = args;
+	philo->sems[TAKE_FORKS] = false;
+	philo->sems[FORK_1] = false;
+	philo->sems[FORK_2] = false;
+	philo->sems[PRINT] = false;
 }
 
 void	wait_for_philos(t_data data)
