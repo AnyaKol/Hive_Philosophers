@@ -17,27 +17,28 @@ int	main(int argc, char **argv)
 	t_data	data;
 
 	memset(&data, 0, sizeof(data));
-	if (!check_args(argc, argv, &data))
+	if (!check_args(argc, argv, &data) || !init_pids(&data))
 		return (EXIT_FAILURE);
-	if (!init_sem(&data.args, (unsigned int) data.philos_num))
+	if (!init_sem_parent(&data.args, (unsigned int) data.philos_num))
+	{
+		free(data.pids);
 		return (EXIT_FAILURE);
+	}
 	if (!fork_philos(data))
 	{
-		if (kill(0, SIGTERM) == FAILURE)
-			perror("kill");
-		unlink_sem();
+		kill_philos(data, 0);
+		clean_up_parent(data);
 		return (EXIT_FAILURE);
 	}
 	wait_for_philos(data);
-	unlink_sem();
+	clean_up_parent(data);
 	return (EXIT_SUCCESS);
 }
 
 bool	fork_philos(t_data data)
 {
 	int		i;
-	pid_t	pid;
-	t_philo philo;
+	t_philo	philo;
 
 	i = 0;
 	philo.args = &data.args;
@@ -48,14 +49,13 @@ bool	fork_philos(t_data data)
 	{
 		philo.index = i + 1;
 		philo.last_meal = get_time_millisec();
-		printf("Fork %d\n", i);//REMOVE
-		pid = fork();
-		if (pid < 0)
+		data.pids[i] = fork();
+		if (data.pids[i] < 0)
 		{
 			perror("fork");
 			return (false);
 		}
-		else if (pid == 0)
+		else if (data.pids[i] == 0)
 			routine(philo);
 		i++;
 	}
@@ -64,20 +64,34 @@ bool	fork_philos(t_data data)
 
 void	wait_for_philos(t_data data)
 {
-	int	status;
+	int		status;
+	pid_t	term;
+	int		i;
+
+	i = 0;
+	while (i < data.philos_num)
+	{
+		term = waitpid(-1, &status, 0);
+		if (WEXITSTATUS(status) == EXIT_FAILURE)
+		{
+			kill_philos(data, term);
+			return ;
+		}
+		i++;
+	}
+}
+
+void	kill_philos(t_data data, pid_t term)
+{
 	int	i;
 
 	i = 0;
 	while (i < data.philos_num)
 	{
-		printf("Wait %d\n", i);//REMOVE
-		waitpid(-1, &status, 0);
-		printf("Status: %d\n", status);//REMOVE
-		if (status == EXIT_FAILURE)
+		if (term == 0 || data.pids[i] != term)
 		{
-			if (kill(0, SIGTERM) == FAILURE)
+			if (kill(data.pids[i], SIGTERM) == FAILURE)
 				perror("kill");
-			return ;
 		}
 		i++;
 	}

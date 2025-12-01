@@ -31,17 +31,20 @@
 # include "structs_bonus.h"
 
 bool	check_args(int argc, char **argv, t_data *data);
-bool	init_sem(t_args *args, unsigned int philos_num);
-void	unlink_sem(void);
-void	post_all_philo_sems(t_philo *philo);
-void	post_philo_sem(sem_t *sem, bool *taken);
+bool	init_pids(t_data *data);
 bool	fork_philos(t_data data);
 void	wait_for_philos(t_data data);
+void	kill_philos(t_data data, pid_t term);
 void	routine(t_philo philo);
 void	set_death_check(t_philo *philo);
 bool	check_death(int cur_time, t_philo philo);
 int		get_time_millisec(void);
 bool	print_message(t_philo *philo, char *msg);
+
+/* -----------  Semaphore  -------------------------------------------------- */
+bool	init_sem_parent(t_args *args, unsigned int philos_num);
+void	clean_up_parent(t_data data);
+void	post_philo_sem(sem_t *sem, bool *taken);
 
 /* -----------  Libft func  ------------------------------------------------- */
 int		ft_atoi(const char *nptr);

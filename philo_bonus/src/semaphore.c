@@ -12,53 +12,59 @@
 
 #include "philo_bonus.h"
 
-static bool	open_and_close(sem_t *sem, const char *name, unsigned int value);
+static sem_t	*open_sem(const char *name, unsigned int value);
+static void		unlink_sem(void);
 
-bool	init_sem(t_args *args, unsigned int philos_num)
+bool	init_sem_parent(t_args *args, unsigned int philos_num)
 {
-	if (!open_and_close(&args->forks_num, SEM_FORKS_NUM, philos_num))
+	sem_unlink(SEM_FORKS_NUM);
+	sem_unlink(SEM_PRINT);
+	args->forks_num = open_sem(SEM_FORKS_NUM, philos_num);
+	if (!args->forks_num)
 	{
 		unlink_sem();
 		return (false);
 	}
-	if (!open_and_close(&args->print, SEM_PRINT, 1))
+	args->print = open_sem(SEM_PRINT, 1);
+	if (!args->print)
 	{
+		if (sem_close(args->forks_num) == FAILURE)
+			perror("sem_close");
 		unlink_sem();
 		return (false);
 	}
 	return (true);
 }
 
-static bool	open_and_close(sem_t *sem, const char *name, unsigned int value)
+static sem_t	*open_sem(const char *name, unsigned int value)
 {
-	sem_unlink(name);
+	sem_t	*sem;
+
 	sem = sem_open(name, O_CREAT, O_RDONLY, value);
 	if (sem == SEM_FAILED)
 	{
 		perror("sem_open");
-		return (false);
+		return (NULL);
 	}
-	if (sem_close(sem) == FAILURE)
-	{
-		perror("sem_close");
-		return (false);
-	}
-	return (true);
+	return (sem);
 }
 
-void	unlink_sem(void)
+void	clean_up_parent(t_data data)
+{
+	if (sem_close(data.args.forks_num) == FAILURE)
+		perror("sem_close");
+	if (sem_close(data.args.print) == FAILURE)
+		perror("sem_close");
+	unlink_sem();
+	free(data.pids);
+}
+
+static void	unlink_sem(void)
 {
 	if (sem_unlink(SEM_FORKS_NUM) == FAILURE)
 		perror("sem_unlink");
 	if (sem_unlink(SEM_PRINT) == FAILURE)
 		perror("sem_unlink");
-}
-
-void	post_all_philo_sems(t_philo *philo)
-{
-	post_philo_sem(&philo->args->forks_num, &philo->sems[0]);
-	post_philo_sem(&philo->args->forks_num, &philo->sems[1]);
-	post_philo_sem(&philo->args->print, &philo->sems[2]);
 }
 
 void	post_philo_sem(sem_t *sem, bool *taken)

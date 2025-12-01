@@ -41,18 +41,22 @@ void	routine(t_philo philo)
 
 static bool	take_forks(t_philo *philo)
 {
-	sem_wait(&philo->args->forks_num);
+	if (!print_message(philo, "is thinking\n"))
+		return (false);
+	sem_wait(philo->args->forks_num);
 	philo->sems[0] = true;
-	if (!print_message(philo, "has taken a fork\n"))
+	if (!print_message(philo, "has taken a fork\n")
+		|| !print_message(philo, "is thinking\n"))
 	{
-		post_all_philo_sems(philo);
+		post_philo_sem(philo->args->forks_num, &philo->sems[0]);
 		return (false);
 	}
-	sem_wait(&philo->args->forks_num);
-	philo->sems[1] = true; 
+	sem_wait(philo->args->forks_num);
+	philo->sems[1] = true;
 	if (!print_message(philo, "has taken a fork\n"))
 	{
-		post_all_philo_sems(philo);
+		post_philo_sem(philo->args->forks_num, &philo->sems[0]);
+		post_philo_sem(philo->args->forks_num, &philo->sems[1]);
 		return (false);
 	}
 	return (true);
@@ -63,7 +67,7 @@ static bool	start_eating(t_philo *philo)
 	bool	result;
 
 	result = check_death(get_time_millisec() + philo->args->time_to_eat,
-		*philo);
+			*philo);
 	if (result)
 		result = print_message(philo, "is eating\n");
 	if (result)
@@ -71,7 +75,8 @@ static bool	start_eating(t_philo *philo)
 		usleep(philo->args->time_to_eat * 1000);
 		philo->last_meal = get_time_millisec();
 	}
-	post_all_philo_sems(philo);
+	post_philo_sem(philo->args->forks_num, &philo->sems[0]);
+	post_philo_sem(philo->args->forks_num, &philo->sems[1]);
 	return (result);
 }
 
@@ -80,5 +85,29 @@ static bool	start_sleeping(t_philo *philo)
 	if (!print_message(philo, "is sleeping\n"))
 		return (false);
 	usleep(philo->args->time_to_sleep * 1000);
+	return (true);
+}
+
+bool	print_message(t_philo *philo, char *msg)
+{
+	int	time;
+	int	cur_time;
+
+	sem_wait(philo->args->print);
+	philo->sems[2] = true;
+	cur_time = get_time_millisec();
+	if (cur_time == FAILURE)
+	{
+		post_philo_sem(philo->args->print, &philo->sems[2]);
+		return (false);
+	}
+	time = cur_time - philo->args->start_time;
+	if (printf("%d %d %s", time, philo->index, msg) == FAILURE)
+	{
+		perror("printf");
+		post_philo_sem(philo->args->print, &philo->sems[2]);
+		return (false);
+	}
+	post_philo_sem(philo->args->print, &philo->sems[2]);
 	return (true);
 }
