@@ -13,6 +13,14 @@
 #ifndef STRUCTS_BONUS_H
 # define STRUCTS_BONUS_H
 
+typedef enum e_philo_sem
+{
+	TAKE_FORKS = 0,
+	FORK_1,
+	FORK_2,
+	PRINT
+}	t_philo_sem;
+
 typedef struct s_args
 {
 	int				time_to_die;
@@ -21,6 +29,7 @@ typedef struct s_args
 	int				food_num;
 	int				start_time;
 	bool			finish;
+	sem_t			*take_forks;
 	sem_t			*forks_num;
 	sem_t			*print;
 }	t_args;
@@ -36,7 +45,7 @@ typedef struct s_philo
 {
 	int			index;
 	int			last_meal;
-	bool		sems[3];
+	bool		sems[4];
 	pthread_t	thread;
 	t_args		*args;
 }	t_philo;

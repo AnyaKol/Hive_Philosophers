@@ -6,7 +6,7 @@
 #    By: akolupae <akolupae@student.hive.fi>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/11/01 17:23:31 by akolupae          #+#    #+#              #
-#    Updated: 2025/11/29 19:34:29 by akolupae         ###   ########.fr        #
+#    Updated: 2025/12/01 16:42:50 by akolupae         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -21,6 +21,7 @@ SRC = \
 	main.c \
 	check_args.c \
 	init.c \
+	parent.c \
 	routine.c \
 	death_check.c \
 	semaphore.c \

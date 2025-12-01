@@ -38,8 +38,7 @@ static void	*exit_on_death(void *ptr)
 	{
 		if (!check_death(get_time_millisec(), *philo))
 		{
-			post_philo_sem(philo->args->forks_num, &philo->sems[0]);
-			post_philo_sem(philo->args->forks_num, &philo->sems[1]);
+			philo_post_all_sems(philo);
 			print_message(philo, "died\n");
 			exit(EXIT_FAILURE);
 		}

@@ -17,6 +17,7 @@
 # define EXIT_SUCCESS 0
 # define FAILURE -1
 # define SUCCESS 0
+# define SEM_TAKE_FORKS "/take_forks"
 # define SEM_FORKS_NUM "/forks_num"
 # define SEM_PRINT "/print"
 
