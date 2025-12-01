@@ -34,7 +34,10 @@ bool	fork_philos(t_data data)
 			return (false);
 		}
 		else if (data.pids[i] == 0)
+		{
+			free(data.pids);
 			routine(philo);
+		}
 		i++;
 	}
 	return (true);
