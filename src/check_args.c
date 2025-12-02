@@ -32,7 +32,10 @@ bool	check_args(int argc, char **argv, t_data *data)
 	data->args.time_to_eat = numbers[2];
 	data->args.time_to_sleep = numbers[3];
 	data->args.food_num = numbers[4];
-	data->args.start_time = get_time_millisec();
+	data->args.odd = false;
+	if (data->philos_num % 2 == 1)
+		data->args.odd = true;
+	data->args.start = false;
 	return (true);
 }
 

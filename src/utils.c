@@ -33,6 +33,12 @@ void	set_value(pthread_mutex_t *mutex, bool *var, bool value)
 	pthread_mutex_unlock(mutex);
 }
 
+void	release_forks(t_philo *philo)
+{
+	set_value(&philo->fork[0]->take_fork, &philo->fork[0]->avail, true);
+	set_value(&philo->fork[1]->take_fork, &philo->fork[1]->avail, true);
+}
+
 bool	print_message(t_philo philo, char *msg)
 {
 	int	time;
@@ -58,22 +64,5 @@ bool	print_message(t_philo philo, char *msg)
 		return (false);
 	}
 	pthread_mutex_unlock(&philo.args->print);
-	return (true);
-}
-
-bool	join_threads(t_data *data)
-{
-	int	i;
-
-	i = 0;
-	while (i < data->philos_num)
-	{
-		if (pthread_join(data->philos[i], NULL) != SUCCESS)
-		{
-			perror("pthread_join");
-			return (false);
-		}
-		i++;
-	}
 	return (true);
 }

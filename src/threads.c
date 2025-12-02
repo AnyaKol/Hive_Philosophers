@@ -12,42 +12,45 @@
 
 #include "philo.h"
 
+static int		init_threads(t_data *data);
 static bool		init_one_philo(t_data *data, int index);
 static t_philo	*init_philo_struct(t_data *data, int index);
-static void		swap_forks(t_fork **ptr1, t_fork **ptr2);
-static void		wait_for_philos(t_data *data);
 
-bool	init_threads(t_data *data)
+bool	init_and_join_threads(t_data *data)
+{
+	int		i;
+	int		num;
+	bool	result;
+
+	i = 0;
+	num = init_threads(data);
+	result = (num == data->philos_num);
+	data->args.start_time = get_time_millisec();
+	data->args.start = true;
+	while (i < num)
+	{
+		if (pthread_join(data->philos[i], NULL) != SUCCESS)
+		{
+			perror("pthread_join");
+			result = false;
+		}
+		i++;
+	}
+	return (result);
+}
+
+static int	init_threads(t_data *data)
 {
 	int		i;
 
-	i = 1;
-	while (i < data->philos_num)
-	{
-		if (!init_one_philo(data, i))
-			return (false);
-		i += 2;
-	}
-	wait_for_philos(data);
 	i = 0;
 	while (i < data->philos_num)
 	{
 		if (!init_one_philo(data, i))
-			return (false);
-		i += 2;
+			break ;
+		i++;
 	}
-	return (true);
-}
-
-static void	wait_for_philos(t_data *data)
-{
-	if (data->philos_num < 2)
-		return ;
-	while (data->forks[1].avail)
-	{
-		if (get_time_millisec() - data->args.start_time > TIMEOUT)
-			return ;
-	}
+	return (i);
 }
 
 static bool	init_one_philo(t_data *data, int index)
@@ -78,23 +81,12 @@ static t_philo	*init_philo_struct(t_data *data, int index)
 		return (false);
 	}
 	philo->index = index + 1;
-	philo->last_meal = get_time_millisec();
+	philo->eat_count = 0;
 	philo->args = &data->args;
 	philo->fork[0] = &data->forks[index];
 	if (index == data->philos_num - 1)
 		philo->fork[1] = &data->forks[0];
 	else
 		philo->fork[1] = &data->forks[index + 1];
-	if (index / 2 == 1)
-		swap_forks(&philo->fork[0], &philo->fork[1]);
 	return (philo);
-}
-
-static void	swap_forks(t_fork **ptr1, t_fork **ptr2)
-{
-	t_fork	*temp;
-
-	temp = *ptr1;
-	*ptr1 = *ptr2;
-	*ptr2 = temp;
 }

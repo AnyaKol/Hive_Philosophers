@@ -27,13 +27,18 @@
 
 bool	check_args(int argc, char **argv, t_data *data);
 bool	init_data(t_data *data);
-bool	init_threads(t_data *data);
 void	free_data(t_data *data);
+bool	init_and_join_threads(t_data *data);
+bool	wait_for_start(t_philo *philo);
 void	*routine(void *ptr);
-int		get_time_millisec(void);
+bool	take_fork(t_fork *fork, t_philo philo);
+bool	start_eating(t_philo *philo);
+bool	start_sleeping(t_philo philo);
+bool	check_death(int cur_time, t_philo philo);
+void	release_forks(t_philo *philo);
 void	set_value(pthread_mutex_t *mutex, bool *var, bool value);
 bool	print_message(t_philo philo, char *msg);
-bool	join_threads(t_data *data);
+int		get_time_millisec(void);
 
 /* -----------  Libft func  ------------------------------------------------- */
 int		ft_atoi(const char *nptr);

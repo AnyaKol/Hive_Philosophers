@@ -26,9 +26,11 @@ typedef struct s_args
 	int				time_to_sleep;
 	int				food_num;
 	int				start_time;
-	pthread_mutex_t	print;
+	bool			start;
+	bool			odd;
 	bool			finish;
 	pthread_mutex_t	finish_lock;
+	pthread_mutex_t	print;
 }	t_args;
 
 typedef struct s_data
@@ -43,6 +45,7 @@ typedef struct s_philo
 {
 	int		index;
 	int		last_meal;
+	int		eat_count;
 	t_args	*args;
 	t_fork	*fork[2];
 }	t_philo;

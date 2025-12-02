@@ -20,10 +20,11 @@ SRCDIR = src
 SRC = \
 	main.c \
 	check_args.c \
-	init_data.c \
-	init_threads.c \
+	init.c \
+	threads.c \
 	free.c \
 	routine.c \
+	setup.c \
 	utils.c \
 	ft_atoi.c \
 	ft_putendl_fd.c \

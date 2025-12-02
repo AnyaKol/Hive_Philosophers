@@ -12,29 +12,27 @@
 
 #include "philo.h"
 
-static bool	take_fork(t_fork *fork, t_philo philo);
-static bool	start_eating(t_philo *philo);
-static bool	start_sleeping(t_philo philo);
-static bool	check_death(int cur_time, t_philo philo);
-
 void	*routine(void *ptr)
 {
 	t_philo	*philo;
-	int		eat_count;
+	bool	setup;
 
 	philo = (t_philo *)ptr;
-	eat_count = 0;
-	while (eat_count != philo->args->food_num)
+	setup = wait_for_start(philo);
+	while (setup)
 	{
-		if (!take_fork(philo->fork[0], *philo)
-			|| !take_fork(philo->fork[1], *philo))
+		if (!take_fork(philo->fork[0], *philo))
 			break ;
-		if (!start_eating(philo) || ++eat_count == philo->args->food_num)
+		if (!take_fork(philo->fork[1], *philo))
+		{
+			set_value(&philo->fork[0]->take_fork, &philo->fork[0]->avail, true);
 			break ;
-		if (!start_sleeping(*philo))
+		}
+		if (!start_eating(philo) || ++philo->eat_count == philo->args->food_num
+			|| !start_sleeping(*philo))
 			break ;
 	}
-	if (!philo->args->finish && eat_count != philo->args->food_num)
+	if (!philo->args->finish && philo->eat_count != philo->args->food_num)
 	{
 		print_message(*philo, "died\n");
 		set_value(&philo->args->finish_lock, &philo->args->finish, true);
@@ -43,7 +41,7 @@ void	*routine(void *ptr)
 	return (NULL);
 }
 
-static bool	take_fork(t_fork *fork, t_philo philo)
+bool	take_fork(t_fork *fork, t_philo philo)
 {
 	if (philo.args->finish)
 		return (false);
@@ -61,36 +59,47 @@ static bool	take_fork(t_fork *fork, t_philo philo)
 	return (print_message(philo, "has taken a fork\n"));
 }
 
-static bool	start_eating(t_philo *philo)
+bool	start_eating(t_philo *philo)
 {
-	if (philo->args->finish)
+	int	start_time;
+
+	if (philo->args->finish || !print_message(*philo, "is eating\n"))
+	{
+		release_forks(philo);
 		return (false);
-	if (!check_death(get_time_millisec() + philo->args->time_to_eat, *philo))
-		return (false);
-	if (!print_message(*philo, "is eating\n"))
-		return (false);
-	usleep(philo->args->time_to_eat * 1000);
+	}
+	start_time = get_time_millisec();
+	while (get_time_millisec() - start_time < philo->args->time_to_eat)
+	{
+		if (!check_death(get_time_millisec(), *philo))
+		{
+			release_forks(philo);
+			return (false);
+		}
+		usleep(10 * 1000);
+	}
 	philo->last_meal = get_time_millisec();
-	set_value(&philo->fork[0]->take_fork, &philo->fork[0]->avail, true);
-	set_value(&philo->fork[1]->take_fork, &philo->fork[1]->avail, true);
+	release_forks(philo);
 	return (true);
 }
 
-static bool	start_sleeping(t_philo philo)
+bool	start_sleeping(t_philo philo)
 {
-	if (philo.args->finish)
+	int	start_time;
+
+	if (philo.args->finish || !print_message(philo, "is sleeping\n"))
 		return (false);
-	if (!print_message(philo, "is sleeping\n"))
-		return (false);
-	while (get_time_millisec() - philo.last_meal < philo.args->time_to_sleep)
+	start_time = get_time_millisec();
+	while (get_time_millisec() - start_time < philo.args->time_to_sleep)
 	{
 		if (!check_death(get_time_millisec(), philo))
 			return (false);
+		usleep(10 * 1000);
 	}
 	return (true);
 }
 
-static bool	check_death(int cur_time, t_philo philo)
+bool	check_death(int cur_time, t_philo philo)
 {
 	int	time_passed;
 
