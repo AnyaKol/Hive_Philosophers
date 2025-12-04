@@ -20,10 +20,9 @@ SRCDIR = src
 SRC = \
 	main.c \
 	check_args.c \
-	init.c \
+	init_and_clean.c \
 	parent.c \
 	routine.c \
-	death_check.c \
 	semaphore.c \
 	utils.c \
 	ft_atoi.c \

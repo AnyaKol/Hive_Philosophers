@@ -33,8 +33,8 @@
 bool	check_args(int argc, char **argv, t_data *data);
 bool	init_pids(t_data *data);
 bool	init_sems(t_args *args, unsigned int philos_num);
-void	unlink_sem(void);
 void	clean_up(t_data data);
+void	unlink_sem(void);
 
 /* -----------  Parent process  --------------------------------------------- */
 bool	fork_philos(t_data data);
@@ -43,12 +43,11 @@ void	kill_philos(t_data data, pid_t term);
 
 /* -----------  Child process  ---------------------------------------------- */
 void	routine(t_philo philo);
-void	set_death_check(t_philo *philo);
-bool	check_death(int cur_time, t_philo philo);
+void	wait_sem_and_check_death(sem_t *sem, int index, t_philo *philo);
+void	post_all_sems(t_philo *philo);
+void	post_sem(sem_t *sem, bool *taken);
 int		get_time_millisec(void);
-bool	print_message(t_philo *philo, char *msg);
-void	philo_post_all_sems(t_philo *philo);
-void	philo_post_sem(sem_t *sem, bool *taken);
+bool	check_death(int cur_time, t_philo philo);
 
 /* -----------  Libft func  ------------------------------------------------- */
 int		ft_atoi(const char *nptr);

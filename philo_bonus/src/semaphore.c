@@ -12,59 +12,33 @@
 
 #include "philo_bonus.h"
 
-static sem_t	*open_sem(const char *name, unsigned int value);
-
-bool	init_sems(t_args *args, unsigned int philos_num)
+void	wait_sem_and_check_death(sem_t *sem, int index, t_philo *philo)
 {
-	sem_unlink(SEM_TAKE_FORKS);
-	sem_unlink(SEM_FORKS_NUM);
-	sem_unlink(SEM_PRINT);
-	args->take_forks = open_sem(SEM_TAKE_FORKS, philos_num / 2);
-	args->forks_num = open_sem(SEM_FORKS_NUM, philos_num);
-	args->print = open_sem(SEM_PRINT, 1);
-	if (!args->take_forks || !args->forks_num || !args->print)
+	sem_wait(sem);
+	if (!check_death(philo))
 	{
-		sem_close(args->take_forks);
-		sem_close(args->forks_num);
-		sem_close(args->print);
-		unlink_sem();
+		if (sem_post(sem) == FAILURE)
+			perror("sem_post");
 		return (false);
 	}
+	philo->sems[index] = true;
 	return (true);
 }
 
-static sem_t	*open_sem(const char *name, unsigned int value)
+void	post_all_sems(t_philo *philo)
 {
-	sem_t	*sem;
+	post_sem(philo->args->take_forks, &philo->sems[TAKE_FORKS]);
+	post_sem(philo->args->forks_num, &philo->sems[FORK_1]);
+	post_sem(philo->args->forks_num, &philo->sems[FORK_2]);
+	post_sem(philo->args->forks_num, &philo->sems[PRINT]);
+}
 
-	sem = sem_open(name, O_CREAT, O_RDONLY, value);
-	if (sem == SEM_FAILED)
+void	post_sem(sem_t *sem, bool *taken)
+{
+	if (*taken)
 	{
-		perror("sem_open");
-		return (NULL);
+		if (sem_post(sem) == FAILURE)
+			perror("sem_post");
+		*taken = false;
 	}
-	return (sem);
-}
-
-void	unlink_sem(void)
-{
-	if (sem_unlink(SEM_TAKE_FORKS) == FAILURE)
-		perror("sem_unlink");
-	if (sem_unlink(SEM_FORKS_NUM) == FAILURE)
-		perror("sem_unlink");
-	if (sem_unlink(SEM_PRINT) == FAILURE)
-		perror("sem_unlink");
-}
-
-void	clean_up(t_data data)
-{
-	if (data.pids)
-		free(data.pids);
-	if (sem_close(data.args.take_forks) == FAILURE)
-		perror("sem_close");
-	if (sem_close(data.args.forks_num) == FAILURE)
-		perror("sem_close");
-	if (sem_close(data.args.print) == FAILURE)
-		perror("sem_close");
-	unlink_sem();
 }

@@ -26,44 +26,12 @@ int	get_time_millisec(void)
 	return (millisec);
 }
 
-bool	print_message(t_philo *philo, char *msg)
+bool	check_death(int cur_time, t_philo philo)
 {
-	int	time;
-	int	cur_time;
+	int	time_passed;
 
-	sem_wait(philo->args->print);
-	philo->sems[PRINT] = true;
-	cur_time = get_time_millisec();
-	if (cur_time == FAILURE)
-	{
-		philo_post_all_sems(philo);
+	time_passed = cur_time - philo.last_meal;
+	if (time_passed >= philo.args->time_to_die)
 		return (false);
-	}
-	time = cur_time - philo->args->start_time;
-	if (printf("%d %d %s", time, philo->index, msg) == FAILURE)
-	{
-		perror("printf");
-		philo_post_all_sems(philo);
-		return (false);
-	}
-	philo_post_sem(philo->args->print, &philo->sems[PRINT]);
 	return (true);
-}
-
-void	philo_post_all_sems(t_philo *philo)
-{
-	philo_post_sem(philo->args->take_forks, &philo->sems[TAKE_FORKS]);
-	philo_post_sem(philo->args->forks_num, &philo->sems[FORK_1]);
-	philo_post_sem(philo->args->forks_num, &philo->sems[FORK_2]);
-	philo_post_sem(philo->args->forks_num, &philo->sems[PRINT]);
-}
-
-void	philo_post_sem(sem_t *sem, bool *taken)
-{
-	if (*taken)
-	{
-		if (sem_post(sem) == FAILURE)
-			perror("sem_post");
-		*taken = false;
-	}
 }

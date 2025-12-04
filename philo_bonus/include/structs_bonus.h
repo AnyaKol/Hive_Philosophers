@@ -46,7 +46,6 @@ typedef struct s_philo
 	int			index;
 	int			last_meal;
 	bool		sems[4];
-	pthread_t	thread;
 	t_args		*args;
 }	t_philo;
 
