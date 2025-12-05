@@ -12,10 +12,10 @@
 
 #include "philo_bonus.h"
 
-void	wait_sem_and_check_death(sem_t *sem, int index, t_philo *philo)
+bool	wait_sem_and_check_death(sem_t *sem, int index, t_philo *philo)
 {
 	sem_wait(sem);
-	if (!check_death(philo))
+	if (!check_death(*philo))
 	{
 		if (sem_post(sem) == FAILURE)
 			perror("sem_post");

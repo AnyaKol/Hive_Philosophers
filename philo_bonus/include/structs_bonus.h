@@ -30,6 +30,7 @@ typedef struct s_args
 	int				start_time;
 	bool			finish;
 	sem_t			*take_forks;
+	bool			can_take;
 	sem_t			*forks_num;
 	sem_t			*print;
 }	t_args;

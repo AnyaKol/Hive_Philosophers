@@ -43,11 +43,11 @@ void	kill_philos(t_data data, pid_t term);
 
 /* -----------  Child process  ---------------------------------------------- */
 void	routine(t_philo philo);
-void	wait_sem_and_check_death(sem_t *sem, int index, t_philo *philo);
+bool	wait_sem_and_check_death(sem_t *sem, int index, t_philo *philo);
 void	post_all_sems(t_philo *philo);
 void	post_sem(sem_t *sem, bool *taken);
+bool	check_death(t_philo philo);
 int		get_time_millisec(void);
-bool	check_death(int cur_time, t_philo philo);
 
 /* -----------  Libft func  ------------------------------------------------- */
 int		ft_atoi(const char *nptr);

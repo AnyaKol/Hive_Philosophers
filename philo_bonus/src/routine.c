@@ -31,7 +31,7 @@ void	routine(t_philo philo)
 		if (!start_sleeping(&philo))
 			break ;
 	}
-	philo_post_all_sems(&philo);
+	post_all_sems(&philo);
 	if (eat_count != philo.args->food_num)
 	{
 		print_message(&philo, "died\n");
@@ -51,11 +51,17 @@ static bool	take_forks(t_philo *philo)
 	if (!print_message(philo, "has taken a fork\n")
 		|| !print_message(philo, "is thinking\n"))
 		return (false);
+	if (!philo->args->can_take)
+	{
+		while (check_death(*philo))
+			usleep(10 * 1000);
+		return (false);
+	}
 	if (!wait_sem_and_check_death(philo->args->forks_num, FORK_2, philo))
 		return (false);
 	if (!print_message(philo, "has taken a fork\n"))
 		return (false);
-	philo_post_sem(philo->args->take_forks, &philo->sems[TAKE_FORKS]);
+	post_sem(philo->args->take_forks, &philo->sems[TAKE_FORKS]);
 	return (true);
 }
 
@@ -66,15 +72,15 @@ static bool	start_eating(t_philo *philo)
 	if (!print_message(philo, "is eating\n"))
 		return (false);
 	start_time = get_time_millisec();
-	while (get_time_millisec() - start_time < philo.args->time_to_eat)
+	while (get_time_millisec() - start_time < philo->args->time_to_eat)
 	{
-		if (!check_death(get_time_millisec(), philo))
+		if (!check_death(*philo))
 			return (false);
 		usleep(10 * 1000);
 	}
 	philo->last_meal = get_time_millisec();
-	philo_post_sem(philo->args->forks_num, &philo->sems[FORK_1]);
-	philo_post_sem(philo->args->forks_num, &philo->sems[FORK_2]);
+	post_sem(philo->args->forks_num, &philo->sems[FORK_1]);
+	post_sem(philo->args->forks_num, &philo->sems[FORK_2]);
 	return (true);
 }
 
@@ -85,9 +91,9 @@ static bool	start_sleeping(t_philo *philo)
 	if (!print_message(philo, "is sleeping\n"))
 		return (false);
 	start_time = get_time_millisec();
-	while (get_time_millisec() - start_time < philo.args->time_to_sleep)
+	while (get_time_millisec() - start_time < philo->args->time_to_sleep)
 	{
-		if (!check_death(get_time_millisec(), philo))
+		if (!check_death(*philo))
 			return (false);
 		usleep(10 * 1000);
 	}
@@ -104,16 +110,16 @@ static bool	print_message(t_philo *philo, char *msg)
 	cur_time = get_time_millisec();
 	if (cur_time == FAILURE)
 	{
-		philo_post_all_sems(philo);
+		post_all_sems(philo);
 		return (false);
 	}
 	time = cur_time - philo->args->start_time;
 	if (printf("%d %d %s", time, philo->index, msg) == FAILURE)
 	{
 		perror("printf");
-		philo_post_all_sems(philo);
+		post_all_sems(philo);
 		return (false);
 	}
-	philo_post_sem(philo->args->print, &philo->sems[PRINT]);
+	post_sem(philo->args->print, &philo->sems[PRINT]);
 	return (true);
 }

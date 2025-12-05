@@ -26,11 +26,11 @@ int	get_time_millisec(void)
 	return (millisec);
 }
 
-bool	check_death(int cur_time, t_philo philo)
+bool	check_death(t_philo philo)
 {
 	int	time_passed;
 
-	time_passed = cur_time - philo.last_meal;
+	time_passed = get_time_millisec() - philo.last_meal;
 	if (time_passed >= philo.args->time_to_die)
 		return (false);
 	return (true);

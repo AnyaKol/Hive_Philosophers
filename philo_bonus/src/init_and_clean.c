@@ -30,7 +30,8 @@ bool	init_sems(t_args *args, unsigned int philos_num)
 	sem_unlink(SEM_TAKE_FORKS);
 	sem_unlink(SEM_FORKS_NUM);
 	sem_unlink(SEM_PRINT);
-	args->take_forks = open_sem(SEM_TAKE_FORKS, philos_num / 2);
+	args->take_forks = open_sem(SEM_TAKE_FORKS,
+			philos_num / 2 + philos_num % 2);
 	args->forks_num = open_sem(SEM_FORKS_NUM, philos_num);
 	args->print = open_sem(SEM_PRINT, 1);
 	if (!args->take_forks || !args->forks_num || !args->print)
