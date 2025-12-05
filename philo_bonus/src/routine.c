@@ -54,7 +54,7 @@ static bool	take_forks(t_philo *philo)
 	if (!philo->args->can_take)
 	{
 		while (check_death(*philo))
-			usleep(10 * 1000);
+			usleep(1 * 1000);
 		return (false);
 	}
 	if (!wait_sem_and_check_death(philo->args->forks_num, FORK_2, philo))
@@ -76,7 +76,7 @@ static bool	start_eating(t_philo *philo)
 	{
 		if (!check_death(*philo))
 			return (false);
-		usleep(10 * 1000);
+		usleep(1 * 1000);
 	}
 	philo->last_meal = get_time_millisec();
 	post_sem(philo->args->forks_num, &philo->sems[FORK_1]);
@@ -95,7 +95,7 @@ static bool	start_sleeping(t_philo *philo)
 	{
 		if (!check_death(*philo))
 			return (false);
-		usleep(10 * 1000);
+		usleep(1 * 1000);
 	}
 	return (true);
 }

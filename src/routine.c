@@ -76,7 +76,7 @@ bool	start_eating(t_philo *philo)
 			release_forks(philo);
 			return (false);
 		}
-		usleep(10 * 1000);
+		usleep(1 * 1000);
 	}
 	philo->last_meal = get_time_millisec();
 	release_forks(philo);
@@ -94,7 +94,7 @@ bool	start_sleeping(t_philo philo)
 	{
 		if (!check_death(get_time_millisec(), philo))
 			return (false);
-		usleep(10 * 1000);
+		usleep(1 * 1000);
 	}
 	return (true);
 }
