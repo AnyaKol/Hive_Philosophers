@@ -103,7 +103,7 @@ bool	print_message(t_philo *philo, char *msg, int status)
 {
 	int	cur_time;
 
-	if (status == philo->last_status)
+	if (status != FORK && status == philo->last_status)
 		return (true);
 	pthread_mutex_lock(&philo->args->print);
 	if (philo->args->finish)
