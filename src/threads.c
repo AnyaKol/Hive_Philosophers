@@ -30,10 +30,7 @@ bool	init_and_join_threads(t_data *data)
 	while (i < num)
 	{
 		if (pthread_join(data->philos[i], NULL) != SUCCESS)
-		{
-			destroy_mutex(data);
 			result = false;
-		}
 		i++;
 	}
 	return (result);
@@ -61,7 +58,10 @@ static bool	init_one_philo(t_data *data, int index)
 	if (!philo)
 		return (false);
 	if (pthread_create(&data->philos[index], NULL, routine, philo) == FAILURE)
+	{
+		free(philo);
 		return (false);
+	}
 	return (true);
 }
 
@@ -74,6 +74,7 @@ static t_philo	*init_philo_struct(t_data *data, int index)
 		return (false);
 	philo->index = index + 1;
 	philo->eat_count = 0;
+	philo->last_status = START;
 	philo->args = &data->args;
 	philo->fork[0] = &data->forks[index];
 	if (index == data->philos_num - 1)

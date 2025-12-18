@@ -21,49 +21,48 @@ void	*routine(void *ptr)
 	setup = wait_for_start(philo);
 	while (setup)
 	{
-		if (!take_fork(philo->fork[0], *philo))
+		if (!take_fork(philo->fork[0], philo))
 			break ;
-		if (!take_fork(philo->fork[1], *philo))
+		if (!take_fork(philo->fork[1], philo))
 		{
 			set_value(&philo->fork[0]->take_fork, &philo->fork[0]->avail, true);
 			break ;
 		}
-		if (!start_eating(philo) || ++philo->eat_count == philo->args->food_num
-			|| !start_sleeping(*philo))
+		if (!start_eating(philo) || !check_eat_count(philo)
+			|| !start_sleeping(philo))
 			break ;
 	}
-	if (!philo->args->finish && philo->eat_count != philo->args->food_num)
-	{
-		print_message(*philo, "died\n");
+	if (!philo->args->finish && philo->eat_count < philo->args->food_num)
+		print_message(philo, "died\n", DIED);
+	if (!philo->args->finish)
 		set_value(&philo->args->finish_lock, &philo->args->finish, true);
-	}
 	free(philo);
 	return (NULL);
 }
 
-bool	take_fork(t_fork *fork, t_philo philo)
+bool	take_fork(t_fork *fork, t_philo *philo)
 {
-	if (philo.args->finish)
+	if (philo->args->finish)
 		return (false);
 	if (!fork->avail)
 	{
-		if (!print_message(philo, "is thinking\n"))
+		if (!print_message(philo, "is thinking\n", THINK))
 			return (false);
 		while (!fork->avail)
 		{
-			if (!check_death(get_time_millisec(), philo))
+			if (!check_death(get_time_millisec(), *philo))
 				return (false);
 		}
 	}
 	set_value(&fork->take_fork, &fork->avail, false);
-	return (print_message(philo, "has taken a fork\n"));
+	return (print_message(philo, "has taken a fork\n", FORK));
 }
 
 bool	start_eating(t_philo *philo)
 {
 	int	start_time;
 
-	if (philo->args->finish || !print_message(*philo, "is eating\n"))
+	if (philo->args->finish || !print_message(philo, "is eating\n", EAT))
 	{
 		release_forks(philo);
 		return (false);
@@ -79,32 +78,52 @@ bool	start_eating(t_philo *philo)
 		usleep(1 * 1000);
 	}
 	philo->last_meal = get_time_millisec();
+	philo->eat_count++;
 	release_forks(philo);
 	return (true);
 }
 
-bool	start_sleeping(t_philo philo)
+bool	start_sleeping(t_philo *philo)
 {
 	int	start_time;
 
-	if (philo.args->finish || !print_message(philo, "is sleeping\n"))
+	if (philo->args->finish || !print_message(philo, "is sleeping\n", SLEEP))
 		return (false);
 	start_time = get_time_millisec();
-	while (get_time_millisec() - start_time < philo.args->time_to_sleep)
+	while (get_time_millisec() - start_time < philo->args->time_to_sleep)
 	{
-		if (!check_death(get_time_millisec(), philo))
+		if (!check_death(get_time_millisec(), *philo))
 			return (false);
 		usleep(1 * 1000);
 	}
 	return (true);
 }
 
-bool	check_death(int cur_time, t_philo philo)
+bool	print_message(t_philo *philo, char *msg, int status)
 {
-	int	time_passed;
+	int	cur_time;
 
-	time_passed = cur_time - philo.last_meal;
-	if (time_passed >= philo.args->time_to_die)
+	if (status == philo->last_status)
+		return (true);
+	pthread_mutex_lock(&philo->args->print);
+	if (philo->args->finish)
+	{
+		pthread_mutex_unlock(&philo->args->print);
 		return (false);
+	}
+	cur_time = get_time_millisec();
+	if (cur_time == FAILURE)
+	{
+		pthread_mutex_unlock(&philo->args->print);
+		return (false);
+	}
+	if (printf("%d %d %s", cur_time - philo->args->start_time, philo->index,
+			msg) == FAILURE)
+	{
+		pthread_mutex_unlock(&philo->args->print);
+		return (false);
+	}
+	philo->last_status = status;
+	pthread_mutex_unlock(&philo->args->print);
 	return (true);
 }

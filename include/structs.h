@@ -13,6 +13,16 @@
 #ifndef STRUCTS_H
 # define STRUCTS_H
 
+typedef enum e_status
+{
+	START,
+	THINK,
+	FORK,
+	EAT,
+	SLEEP,
+	DIED
+}	t_status;
+
 typedef struct s_fork
 {
 	bool			avail;
@@ -25,6 +35,8 @@ typedef struct s_args
 	int				time_to_eat;
 	int				time_to_sleep;
 	int				food_num;
+	int				left_philos;
+	pthread_mutex_t	left_philos_lock;
 	int				start_time;
 	bool			start;
 	bool			odd;
@@ -45,6 +57,7 @@ typedef struct s_philo
 {
 	int		index;
 	int		last_meal;
+	int		last_status;
 	int		eat_count;
 	t_args	*args;
 	t_fork	*fork[2];

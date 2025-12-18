@@ -19,6 +19,7 @@ bool	wait_for_start(t_philo *philo)
 {
 	while (!philo->args->start)
 		continue ;
+	print_message(philo, "is thinking\n", THINK);
 	philo->last_meal = philo->args->start_time;
 	if (philo->index % 2 == 0)
 		return (setup_even(philo));
@@ -35,33 +36,33 @@ bool	wait_for_start(t_philo *philo)
 
 static bool	setup_even(t_philo *philo)
 {
-	if (!take_fork(philo->fork[0], *philo))
+	if (!take_fork(philo->fork[0], philo))
 		return (false);
-	if (!take_fork(philo->fork[1], *philo))
+	if (!take_fork(philo->fork[1], philo))
 	{
 		set_value(&philo->fork[0]->take_fork, &philo->fork[0]->avail, true);
 		return (false);
 	}
-	if (!start_eating(philo) || ++philo->eat_count == philo->args->food_num
-		|| !start_sleeping(*philo))
+	if (!start_eating(philo) || !check_eat_count(philo)
+		|| !start_sleeping(philo))
 		return (false);
 	return (true);
 }
 
 static bool	setup_odd_one(t_philo *philo)
 {
-	if (!take_fork(philo->fork[0], *philo))
+	if (!take_fork(philo->fork[0], philo))
 		return (false);
 	while (philo->fork[1]->avail && !philo->args->finish
 		&& check_death(get_time_millisec(), *philo))
 		continue ;
-	if (!take_fork(philo->fork[1], *philo))
+	if (!take_fork(philo->fork[1], philo))
 	{
 		set_value(&philo->fork[0]->take_fork, &philo->fork[0]->avail, true);
 		return (false);
 	}
-	if (!start_eating(philo) || ++philo->eat_count == philo->args->food_num
-		|| !start_sleeping(*philo))
+	if (!start_eating(philo) || !check_eat_count(philo)
+		|| !start_sleeping(philo))
 		return (false);
 	return (true);
 }

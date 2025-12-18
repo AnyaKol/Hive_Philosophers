@@ -21,9 +21,9 @@ void	free_data(t_data *data)
 		free(data->philos);
 		data->philos = NULL;
 	}
+	destroy_mutex(data);
 	if (data->forks)
 	{
-		destroy_mutex(data);
 		free(data->forks);
 		data->forks = NULL;
 	}
@@ -36,11 +36,9 @@ static void	destroy_mutex(t_data *data)
 	i = 0;
 	while (i < data->philos_num)
 	{
-		if (pthread_mutex_destroy(&data->forks[i].take_fork) != SUCCESS)
-			return ;
+		pthread_mutex_destroy(&data->forks[i].take_fork);
 		i++;
 	}
-	if (pthread_mutex_destroy(&data->args.finish_lock) != SUCCESS
-		|| pthread_mutex_destroy(&data->args.print) != SUCCESS)
-		return ;
+	pthread_mutex_destroy(&data->args.finish_lock);
+	pthread_mutex_destroy(&data->args.print);
 }

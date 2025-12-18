@@ -31,13 +31,14 @@ void	free_data(t_data *data);
 bool	init_and_join_threads(t_data *data);
 bool	wait_for_start(t_philo *philo);
 void	*routine(void *ptr);
-bool	take_fork(t_fork *fork, t_philo philo);
+bool	take_fork(t_fork *fork, t_philo *philo);
 bool	start_eating(t_philo *philo);
-bool	start_sleeping(t_philo philo);
+bool	start_sleeping(t_philo *philo);
 bool	check_death(int cur_time, t_philo philo);
+bool	check_eat_count(t_philo *philo);
 void	release_forks(t_philo *philo);
 void	set_value(pthread_mutex_t *mutex, bool *var, bool value);
-bool	print_message(t_philo philo, char *msg);
+bool	print_message(t_philo *philo, char *msg, int status);
 int		get_time_millisec(void);
 
 /* -----------  Libft func  ------------------------------------------------- */

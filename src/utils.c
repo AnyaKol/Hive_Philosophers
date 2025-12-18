@@ -36,26 +36,28 @@ void	release_forks(t_philo *philo)
 	set_value(&philo->fork[1]->take_fork, &philo->fork[1]->avail, true);
 }
 
-bool	print_message(t_philo philo, char *msg)
+bool	check_death(int cur_time, t_philo philo)
 {
-	int	time;
-	int	cur_time;
+	int	time_passed;
 
-	if (philo.args->finish)
+	time_passed = cur_time - philo.last_meal;
+	if (time_passed >= philo.args->time_to_die)
 		return (false);
-	pthread_mutex_lock(&philo.args->print);
-	cur_time = get_time_millisec();
-	if (cur_time == FAILURE)
-	{
-		pthread_mutex_unlock(&philo.args->print);
-		return (false);
-	}
-	time = cur_time - philo.args->start_time;
-	if (printf("%d %d %s", time, philo.index, msg) == FAILURE)
-	{
-		pthread_mutex_unlock(&philo.args->print);
-		return (false);
-	}
-	pthread_mutex_unlock(&philo.args->print);
 	return (true);
+}
+
+bool	check_eat_count(t_philo *philo)
+{
+	bool	result;
+
+	result = true;
+	if (philo->eat_count == philo->args->food_num)
+	{
+		pthread_mutex_lock(&philo->args->left_philos_lock);
+		philo->args->left_philos--;
+		if (philo->args->left_philos == 0)
+			result = false;
+		pthread_mutex_unlock(&philo->args->left_philos_lock);
+	}
+	return (result);
 }

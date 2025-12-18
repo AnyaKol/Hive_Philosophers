@@ -13,6 +13,7 @@
 #include "philo.h"
 
 static bool	init_mutex(t_data *data);
+static bool	init_mutex_forks(t_data *data);
 
 bool	init_data(t_data *data)
 {
@@ -20,7 +21,10 @@ bool	init_data(t_data *data)
 	data->forks = malloc(data->philos_num * sizeof(t_fork));
 	if (!data->philos || !data->forks || !init_mutex(data))
 	{
-		free_data(data);
+		if (data->philos)
+			free(data->philos);
+		if (data->forks)
+			free(data->forks);
 		return (false);
 	}
 	return (true);
@@ -28,19 +32,40 @@ bool	init_data(t_data *data)
 
 static bool	init_mutex(t_data *data)
 {
+	int	init[3];
+
+	init[0] = pthread_mutex_init(&data->args.finish_lock, NULL);
+	init[1] = pthread_mutex_init(&data->args.print, NULL);
+	init[2] = pthread_mutex_init(&data->args.left_philos_lock, NULL);
+	if (init[0] != SUCCESS || init[1] != SUCCESS || init[2] != SUCCESS
+		|| !init_mutex_forks(data))
+	{
+		if (init[0] == SUCCESS)
+			pthread_mutex_destroy(&data->args.finish_lock);
+		if (init[1] == SUCCESS)
+			pthread_mutex_destroy(&data->args.print);
+		if (init[2] == SUCCESS)
+			pthread_mutex_destroy(&data->args.left_philos_lock);
+		return (false);
+	}
+	return (true);
+}
+
+static bool	init_mutex_forks(t_data *data)
+{
 	int	i;
 
 	i = 0;
 	while (i < data->philos_num)
 	{
 		if (pthread_mutex_init(&data->forks[i].take_fork, NULL) != SUCCESS)
+		{
+			while (i > 0)
+				pthread_mutex_destroy(&data->forks[--i].take_fork);
 			return (false);
+		}
 		data->forks[i].avail = true;
 		i++;
 	}
-	if (pthread_mutex_init(&data->args.finish_lock, NULL) != SUCCESS
-		|| pthread_mutex_init(&data->args.print, NULL) != SUCCESS)
-		return (false);
-	data->args.finish = false;
 	return (true);
 }

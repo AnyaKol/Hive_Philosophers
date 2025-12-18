@@ -28,6 +28,7 @@ bool	check_args(int argc, char **argv, t_data *data)
 	if (!check_numbers(argc - 1, &argv[1], &numbers[0]))
 		return (false);
 	data->philos_num = numbers[0];
+	data->args.left_philos = data->philos_num;
 	data->args.time_to_die = numbers[1];
 	data->args.time_to_eat = numbers[2];
 	data->args.time_to_sleep = numbers[3];
@@ -36,6 +37,7 @@ bool	check_args(int argc, char **argv, t_data *data)
 	if (data->philos_num % 2 == 1)
 		data->args.odd = true;
 	data->args.start = false;
+	data->args.finish = false;
 	return (true);
 }
 
