@@ -6,7 +6,7 @@
 /*   By: akolupae <akolupae@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/24 16:38:39 by akolupae          #+#    #+#             */
-/*   Updated: 2025/11/29 18:13:00 by akolupae         ###   ########.fr       */
+/*   Updated: 2025/12/16 13:02:06 by akolupae         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,10 +18,7 @@ int	get_time_millisec(void)
 	int				millisec;
 
 	if (gettimeofday(&time, NULL) == FAILURE)
-	{
-		perror("gettimeofday");
 		return (FAILURE);
-	}
 	millisec = (int) time.tv_sec * 1000 + (int) time.tv_usec / 1000;
 	return (millisec);
 }

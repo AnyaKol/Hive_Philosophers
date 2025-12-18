@@ -116,7 +116,6 @@ static bool	print_message(t_philo *philo, char *msg)
 	time = cur_time - philo->args->start_time;
 	if (printf("%d %d %s", time, philo->index, msg) == FAILURE)
 	{
-		perror("printf");
 		post_all_sems(philo);
 		return (false);
 	}

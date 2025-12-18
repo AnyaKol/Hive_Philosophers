@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   init.c                                             :+:      :+:    :+:   */
+/*   init_and_clean.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: akolupae <akolupae@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/01 17:25:40 by akolupae          #+#    #+#             */
-/*   Updated: 2025/11/29 16:20:55 by akolupae         ###   ########.fr       */
+/*   Updated: 2025/12/16 12:59:25 by akolupae         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,10 +18,7 @@ bool	init_pids(t_data *data)
 {
 	data->pids = malloc(data->philos_num * sizeof(pid_t));
 	if (!data->pids)
-	{
-		perror("malloc");
 		return (false);
-	}
 	return (true);
 }
 
@@ -51,10 +48,7 @@ static sem_t	*open_sem(const char *name, unsigned int value)
 
 	sem = sem_open(name, O_CREAT, O_RDONLY, value);
 	if (sem == SEM_FAILED)
-	{
-		perror("sem_open");
 		return (NULL);
-	}
 	return (sem);
 }
 
@@ -62,21 +56,15 @@ void	clean_up(t_data data)
 {
 	if (data.pids)
 		free(data.pids);
-	if (sem_close(data.args.take_forks) == FAILURE)
-		perror("sem_close");
-	if (sem_close(data.args.forks_num) == FAILURE)
-		perror("sem_close");
-	if (sem_close(data.args.print) == FAILURE)
-		perror("sem_close");
+	sem_close(data.args.take_forks);
+	sem_close(data.args.forks_num);
+	sem_close(data.args.print);
 	unlink_sem();
 }
 
 void	unlink_sem(void)
 {
-	if (sem_unlink(SEM_TAKE_FORKS) == FAILURE)
-		perror("sem_unlink");
-	if (sem_unlink(SEM_FORKS_NUM) == FAILURE)
-		perror("sem_unlink");
-	if (sem_unlink(SEM_PRINT) == FAILURE)
-		perror("sem_unlink");
+	sem_unlink(SEM_TAKE_FORKS);
+	sem_unlink(SEM_FORKS_NUM);
+	sem_unlink(SEM_PRINT);
 }

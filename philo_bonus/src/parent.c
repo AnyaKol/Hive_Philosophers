@@ -6,7 +6,7 @@
 /*   By: akolupae <akolupae@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/01 17:25:40 by akolupae          #+#    #+#             */
-/*   Updated: 2025/11/29 16:20:55 by akolupae         ###   ########.fr       */
+/*   Updated: 2025/12/16 13:00:31 by akolupae         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,10 +27,7 @@ bool	fork_philos(t_data data)
 		philo.last_meal = get_time_millisec();
 		data.pids[i] = fork();
 		if (data.pids[i] < 0)
-		{
-			perror("fork");
 			return (false);
-		}
 		else if (data.pids[i] == 0)
 		{
 			free(data.pids);
@@ -77,10 +74,7 @@ void	kill_philos(t_data data, pid_t term)
 	while (i < data.philos_num)
 	{
 		if (term == 0 || data.pids[i] != term)
-		{
-			if (kill(data.pids[i], SIGTERM) == FAILURE)
-				perror("kill");
-		}
+			kill(data.pids[i], SIGTERM);
 		i++;
 	}
 }

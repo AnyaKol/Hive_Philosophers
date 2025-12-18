@@ -6,7 +6,7 @@
 /*   By: akolupae <akolupae@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/24 16:38:39 by akolupae          #+#    #+#             */
-/*   Updated: 2025/11/25 14:23:41 by akolupae         ###   ########.fr       */
+/*   Updated: 2025/12/16 12:56:37 by akolupae         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,10 +18,7 @@ int	get_time_millisec(void)
 	int				millisec;
 
 	if (gettimeofday(&time, NULL) == FAILURE)
-	{
-		perror("gettimeofday");
 		return (FAILURE);
-	}
 	millisec = (int) time.tv_sec * 1000 + (int) time.tv_usec / 1000;
 	return (millisec);
 }
@@ -44,12 +41,9 @@ bool	print_message(t_philo philo, char *msg)
 	int	time;
 	int	cur_time;
 
-	pthread_mutex_lock(&philo.args->print);
 	if (philo.args->finish)
-	{
-		pthread_mutex_unlock(&philo.args->print);
 		return (false);
-	}
+	pthread_mutex_lock(&philo.args->print);
 	cur_time = get_time_millisec();
 	if (cur_time == FAILURE)
 	{
@@ -60,7 +54,6 @@ bool	print_message(t_philo philo, char *msg)
 	if (printf("%d %d %s", time, philo.index, msg) == FAILURE)
 	{
 		pthread_mutex_unlock(&philo.args->print);
-		perror("printf");
 		return (false);
 	}
 	pthread_mutex_unlock(&philo.args->print);

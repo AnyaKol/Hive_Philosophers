@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   init_threads.c                                     :+:      :+:    :+:   */
+/*   threads.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: akolupae <akolupae@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/19 18:33:41 by akolupae          #+#    #+#             */
-/*   Updated: 2025/11/24 20:03:02 by akolupae         ###   ########.fr       */
+/*   Updated: 2025/12/16 12:54:46 by akolupae         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ bool	init_and_join_threads(t_data *data)
 	{
 		if (pthread_join(data->philos[i], NULL) != SUCCESS)
 		{
-			perror("pthread_join");
+			destroy_mutex(data);
 			result = false;
 		}
 		i++;
@@ -55,18 +55,13 @@ static int	init_threads(t_data *data)
 
 static bool	init_one_philo(t_data *data, int index)
 {
-	int		result;
 	t_philo	*philo;
 
 	philo = init_philo_struct(data, index);
 	if (!philo)
 		return (false);
-	result = pthread_create(&data->philos[index], NULL, routine, philo);
-	if (result == FAILURE)
-	{
-		perror("pthread_create");
+	if (pthread_create(&data->philos[index], NULL, routine, philo) == FAILURE)
 		return (false);
-	}
 	return (true);
 }
 
@@ -76,10 +71,7 @@ static t_philo	*init_philo_struct(t_data *data, int index)
 
 	philo = malloc(1 * sizeof(t_philo));
 	if (!philo)
-	{
-		perror("malloc");
 		return (false);
-	}
 	philo->index = index + 1;
 	philo->eat_count = 0;
 	philo->args = &data->args;

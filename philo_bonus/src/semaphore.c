@@ -6,7 +6,7 @@
 /*   By: akolupae <akolupae@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/19 18:33:41 by akolupae          #+#    #+#             */
-/*   Updated: 2025/11/30 20:07:28 by akolupae         ###   ########.fr       */
+/*   Updated: 2025/12/16 13:01:48 by akolupae         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,8 +17,7 @@ bool	wait_sem_and_check_death(sem_t *sem, int index, t_philo *philo)
 	sem_wait(sem);
 	if (!check_death(*philo))
 	{
-		if (sem_post(sem) == FAILURE)
-			perror("sem_post");
+		sem_post(sem);
 		return (false);
 	}
 	philo->sems[index] = true;
@@ -37,8 +36,7 @@ void	post_sem(sem_t *sem, bool *taken)
 {
 	if (*taken)
 	{
-		if (sem_post(sem) == FAILURE)
-			perror("sem_post");
+		sem_post(sem);
 		*taken = false;
 	}
 }

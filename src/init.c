@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   init_data.c                                        :+:      :+:    :+:   */
+/*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: akolupae <akolupae@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/19 18:33:41 by akolupae          #+#    #+#             */
-/*   Updated: 2025/11/24 19:28:01 by akolupae         ###   ########.fr       */
+/*   Updated: 2025/12/16 12:49:30 by akolupae         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,19 +34,13 @@ static bool	init_mutex(t_data *data)
 	while (i < data->philos_num)
 	{
 		if (pthread_mutex_init(&data->forks[i].take_fork, NULL) != SUCCESS)
-		{
-			perror("pthread_mutex_init");
 			return (false);
-		}
 		data->forks[i].avail = true;
 		i++;
 	}
 	if (pthread_mutex_init(&data->args.finish_lock, NULL) != SUCCESS
 		|| pthread_mutex_init(&data->args.print, NULL) != SUCCESS)
-	{
-		perror("pthread_mutex_init");
 		return (false);
-	}
 	data->args.finish = false;
 	return (true);
 }

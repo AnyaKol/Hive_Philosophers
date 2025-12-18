@@ -6,7 +6,7 @@
 /*   By: akolupae <akolupae@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/24 16:38:25 by akolupae          #+#    #+#             */
-/*   Updated: 2025/11/24 16:38:29 by akolupae         ###   ########.fr       */
+/*   Updated: 2025/12/16 12:48:59 by akolupae         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,16 +37,10 @@ static void	destroy_mutex(t_data *data)
 	while (i < data->philos_num)
 	{
 		if (pthread_mutex_destroy(&data->forks[i].take_fork) != SUCCESS)
-		{
-			perror("pthread_mutex_destroy");
 			return ;
-		}
 		i++;
 	}
 	if (pthread_mutex_destroy(&data->args.finish_lock) != SUCCESS
 		|| pthread_mutex_destroy(&data->args.print) != SUCCESS)
-	{
-		perror("pthread_mutex_destroy");
 		return ;
-	}
 }
