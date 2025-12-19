@@ -29,7 +29,8 @@ void	post_all_sems(t_philo *philo)
 	post_sem(philo->args->take_forks, &philo->sems[TAKE_FORKS]);
 	post_sem(philo->args->forks_num, &philo->sems[FORK_1]);
 	post_sem(philo->args->forks_num, &philo->sems[FORK_2]);
-	post_sem(philo->args->forks_num, &philo->sems[PRINT]);
+	post_sem(philo->args->print, &philo->sems[PRINT]);
+	post_sem(philo->args->queue, &philo->sems[QUEUE]);
 }
 
 void	post_sem(sem_t *sem, bool *taken)

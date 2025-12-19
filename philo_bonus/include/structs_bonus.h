@@ -18,7 +18,8 @@ typedef enum e_philo_sem
 	TAKE_FORKS = 0,
 	FORK_1,
 	FORK_2,
-	PRINT
+	PRINT,
+	QUEUE
 }	t_philo_sem;
 
 typedef struct s_args
@@ -33,6 +34,7 @@ typedef struct s_args
 	bool			can_take;
 	sem_t			*forks_num;
 	sem_t			*print;
+	sem_t			*queue;
 }	t_args;
 
 typedef struct s_data
@@ -46,7 +48,7 @@ typedef struct s_philo
 {
 	int			index;
 	int			last_meal;
-	bool		sems[4];
+	bool		sems[5];
 	t_args		*args;
 }	t_philo;
 

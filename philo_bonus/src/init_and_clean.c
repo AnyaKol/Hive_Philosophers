@@ -24,18 +24,18 @@ bool	init_pids(t_data *data)
 
 bool	init_sems(t_args *args, unsigned int philos_num)
 {
-	sem_unlink(SEM_TAKE_FORKS);
-	sem_unlink(SEM_FORKS_NUM);
-	sem_unlink(SEM_PRINT);
+	unlink_sem();
 	args->take_forks = open_sem(SEM_TAKE_FORKS,
 			philos_num / 2 + philos_num % 2);
 	args->forks_num = open_sem(SEM_FORKS_NUM, philos_num);
 	args->print = open_sem(SEM_PRINT, 1);
-	if (!args->take_forks || !args->forks_num || !args->print)
+	args->queue = open_sem(SEM_QUEUE, 1);
+	if (!args->take_forks || !args->forks_num || !args->print || !args->queue)
 	{
 		sem_close(args->take_forks);
 		sem_close(args->forks_num);
 		sem_close(args->print);
+		sem_close(args->queue);
 		unlink_sem();
 		return (false);
 	}
@@ -59,6 +59,7 @@ void	clean_up(t_data data)
 	sem_close(data.args.take_forks);
 	sem_close(data.args.forks_num);
 	sem_close(data.args.print);
+	sem_close(data.args.queue);
 	unlink_sem();
 }
 
@@ -67,4 +68,5 @@ void	unlink_sem(void)
 	sem_unlink(SEM_TAKE_FORKS);
 	sem_unlink(SEM_FORKS_NUM);
 	sem_unlink(SEM_PRINT);
+	sem_unlink(SEM_QUEUE);
 }

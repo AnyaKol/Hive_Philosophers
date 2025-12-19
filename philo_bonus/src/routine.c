@@ -44,6 +44,8 @@ static bool	take_forks(t_philo *philo)
 {
 	if (!print_message(philo, "is thinking\n"))
 		return (false);
+	if (!wait_sem_and_check_death(philo->args->queue, QUEUE, philo))
+		return (false);
 	if (!wait_sem_and_check_death(philo->args->take_forks, TAKE_FORKS, philo))
 		return (false);
 	if (!wait_sem_and_check_death(philo->args->forks_num, FORK_1, philo))
@@ -61,7 +63,7 @@ static bool	take_forks(t_philo *philo)
 		return (false);
 	if (!print_message(philo, "has taken a fork\n"))
 		return (false);
-	post_sem(philo->args->take_forks, &philo->sems[TAKE_FORKS]);
+	post_sem(philo->args->queue, &philo->sems[QUEUE]);
 	return (true);
 }
 
@@ -81,6 +83,7 @@ static bool	start_eating(t_philo *philo)
 	philo->last_meal = get_time_millisec();
 	post_sem(philo->args->forks_num, &philo->sems[FORK_1]);
 	post_sem(philo->args->forks_num, &philo->sems[FORK_2]);
+	post_sem(philo->args->take_forks, &philo->sems[TAKE_FORKS]);
 	return (true);
 }
 
@@ -109,16 +112,10 @@ static bool	print_message(t_philo *philo, char *msg)
 	philo->sems[PRINT] = true;
 	cur_time = get_time_millisec();
 	if (cur_time == FAILURE)
-	{
-		post_all_sems(philo);
 		return (false);
-	}
 	time = cur_time - philo->args->start_time;
 	if (printf("%d %d %s", time, philo->index, msg) == FAILURE)
-	{
-		post_all_sems(philo);
 		return (false);
-	}
 	post_sem(philo->args->print, &philo->sems[PRINT]);
 	return (true);
 }

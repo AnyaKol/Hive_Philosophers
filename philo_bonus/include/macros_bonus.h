@@ -20,6 +20,7 @@
 # define SEM_TAKE_FORKS "/take_forks"
 # define SEM_FORKS_NUM "/forks_num"
 # define SEM_PRINT "/print"
+# define SEM_QUEUE "/queue"
 
 # define ARGNUM "Error: Wrong number of arguments"
 # define NOTNUM "Error: Arguments not numerical"
