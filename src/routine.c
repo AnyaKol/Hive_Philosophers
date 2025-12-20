@@ -6,7 +6,7 @@
 /*   By: akolupae <akolupae@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/17 18:32:53 by akolupae          #+#    #+#             */
-/*   Updated: 2025/11/24 19:23:29 by akolupae         ###   ########.fr       */
+/*   Updated: 2025/12/20 15:03:08 by akolupae         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,8 @@ void	*routine(void *ptr)
 			|| !start_sleeping(philo))
 			break ;
 	}
-	if (!philo->args->finish && philo->eat_count < philo->args->food_num)
+	if (!philo->args->finish && (philo->eat_count < philo->args->food_num
+		|| philo->args->food_num == -1))
 		print_message(philo, "died\n", DIED);
 	if (!philo->args->finish)
 		set_value(&philo->args->finish_lock, &philo->args->finish, true);

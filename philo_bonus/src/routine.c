@@ -6,7 +6,7 @@
 /*   By: akolupae <akolupae@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/17 18:32:53 by akolupae          #+#    #+#             */
-/*   Updated: 2025/11/30 20:53:22 by akolupae         ###   ########.fr       */
+/*   Updated: 2025/12/20 15:32:54 by akolupae         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,12 +31,13 @@ void	routine(t_philo philo)
 		if (!start_sleeping(&philo))
 			break ;
 	}
-	post_all_sems(&philo);
 	if (eat_count != philo.args->food_num)
 	{
 		print_message(&philo, "died\n");
+		post_all_sems(&philo);
 		exit(EXIT_FAILURE);
 	}
+	post_all_sems(&philo);
 	exit(EXIT_SUCCESS);
 }
 
