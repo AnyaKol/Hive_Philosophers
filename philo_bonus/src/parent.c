@@ -45,6 +45,7 @@ static void	set_philo_init_state(t_philo *philo, t_args *args)
 	philo->sems[FORK_1] = false;
 	philo->sems[FORK_2] = false;
 	philo->sems[PRINT] = false;
+	philo->sems[QUEUE] = false;
 }
 
 void	wait_for_philos(t_data data)
