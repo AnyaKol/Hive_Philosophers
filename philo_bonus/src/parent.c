@@ -6,7 +6,7 @@
 /*   By: akolupae <akolupae@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/01 17:25:40 by akolupae          #+#    #+#             */
-/*   Updated: 2025/12/16 13:00:31 by akolupae         ###   ########.fr       */
+/*   Updated: 2025/12/22 09:34:10 by akolupae         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,6 @@ static void	set_philo_init_state(t_philo *philo, t_args *args)
 	philo->sems[FORK_1] = false;
 	philo->sems[FORK_2] = false;
 	philo->sems[PRINT] = false;
-	philo->sems[QUEUE] = false;
 }
 
 void	wait_for_philos(t_data data)

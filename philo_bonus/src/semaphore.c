@@ -6,7 +6,7 @@
 /*   By: akolupae <akolupae@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/19 18:33:41 by akolupae          #+#    #+#             */
-/*   Updated: 2025/12/16 13:01:48 by akolupae         ###   ########.fr       */
+/*   Updated: 2025/12/22 09:34:23 by akolupae         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,6 @@ void	post_all_sems(t_philo *philo)
 	post_sem(philo->args->forks_num, &philo->sems[FORK_1]);
 	post_sem(philo->args->forks_num, &philo->sems[FORK_2]);
 	post_sem(philo->args->print, &philo->sems[PRINT]);
-	post_sem(philo->args->queue, &philo->sems[QUEUE]);
 }
 
 void	post_sem(sem_t *sem, bool *taken)

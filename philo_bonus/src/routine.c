@@ -6,7 +6,7 @@
 /*   By: akolupae <akolupae@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/17 18:32:53 by akolupae          #+#    #+#             */
-/*   Updated: 2025/12/20 15:32:54 by akolupae         ###   ########.fr       */
+/*   Updated: 2025/12/22 09:42:26 by akolupae         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 static bool	take_forks(t_philo *philo);
 static bool	start_eating(t_philo *philo);
 static bool	start_sleeping(t_philo *philo);
-static bool	print_message(t_philo *philo, char *msg);
+static bool	print_message(t_philo *philo, char *msg, bool post_print);
 
 void	routine(t_philo philo)
 {
@@ -33,8 +33,10 @@ void	routine(t_philo philo)
 	}
 	if (eat_count != philo.args->food_num)
 	{
-		print_message(&philo, "died\n");
-		post_all_sems(&philo);
+		print_message(&philo, "died\n", false);
+		post_sem(philo.args->take_forks, &philo.sems[TAKE_FORKS]);
+		post_sem(philo.args->forks_num, &philo.sems[FORK_1]);
+		post_sem(philo.args->forks_num, &philo.sems[FORK_2]);
 		exit(EXIT_FAILURE);
 	}
 	post_all_sems(&philo);
@@ -43,16 +45,14 @@ void	routine(t_philo philo)
 
 static bool	take_forks(t_philo *philo)
 {
-	if (!print_message(philo, "is thinking\n"))
-		return (false);
-	if (!wait_sem_and_check_death(philo->args->queue, QUEUE, philo))
+	if (!print_message(philo, "is thinking\n", true))
 		return (false);
 	if (!wait_sem_and_check_death(philo->args->take_forks, TAKE_FORKS, philo))
 		return (false);
 	if (!wait_sem_and_check_death(philo->args->forks_num, FORK_1, philo))
 		return (false);
-	if (!print_message(philo, "has taken a fork\n")
-		|| !print_message(philo, "is thinking\n"))
+	if (!print_message(philo, "has taken a fork\n", true)
+		|| !print_message(philo, "is thinking\n", true))
 		return (false);
 	if (!philo->args->can_take)
 	{
@@ -62,9 +62,9 @@ static bool	take_forks(t_philo *philo)
 	}
 	if (!wait_sem_and_check_death(philo->args->forks_num, FORK_2, philo))
 		return (false);
-	if (!print_message(philo, "has taken a fork\n"))
+	post_sem(philo->args->take_forks, &philo->sems[TAKE_FORKS]);
+	if (!print_message(philo, "has taken a fork\n", true))
 		return (false);
-	post_sem(philo->args->queue, &philo->sems[QUEUE]);
 	return (true);
 }
 
@@ -72,7 +72,7 @@ static bool	start_eating(t_philo *philo)
 {
 	int	start_time;
 
-	if (!print_message(philo, "is eating\n"))
+	if (!print_message(philo, "is eating\n", true))
 		return (false);
 	start_time = get_time_millisec();
 	while (get_time_millisec() - start_time < philo->args->time_to_eat)
@@ -84,7 +84,6 @@ static bool	start_eating(t_philo *philo)
 	philo->last_meal = get_time_millisec();
 	post_sem(philo->args->forks_num, &philo->sems[FORK_1]);
 	post_sem(philo->args->forks_num, &philo->sems[FORK_2]);
-	post_sem(philo->args->take_forks, &philo->sems[TAKE_FORKS]);
 	return (true);
 }
 
@@ -92,7 +91,7 @@ static bool	start_sleeping(t_philo *philo)
 {
 	int	start_time;
 
-	if (!print_message(philo, "is sleeping\n"))
+	if (!print_message(philo, "is sleeping\n", true))
 		return (false);
 	start_time = get_time_millisec();
 	while (get_time_millisec() - start_time < philo->args->time_to_sleep)
@@ -104,7 +103,7 @@ static bool	start_sleeping(t_philo *philo)
 	return (true);
 }
 
-static bool	print_message(t_philo *philo, char *msg)
+static bool	print_message(t_philo *philo, char *msg, bool post_print)
 {
 	int	time;
 	int	cur_time;
@@ -117,6 +116,7 @@ static bool	print_message(t_philo *philo, char *msg)
 	time = cur_time - philo->args->start_time;
 	if (printf("%d %d %s", time, philo->index, msg) == FAILURE)
 		return (false);
-	post_sem(philo->args->print, &philo->sems[PRINT]);
+	if (post_print)
+		post_sem(philo->args->print, &philo->sems[PRINT]);
 	return (true);
 }

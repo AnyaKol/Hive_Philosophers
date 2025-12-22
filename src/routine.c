@@ -33,7 +33,7 @@ void	*routine(void *ptr)
 			break ;
 	}
 	if (!philo->args->finish && (philo->eat_count < philo->args->food_num
-		|| philo->args->food_num == -1))
+			|| philo->args->food_num == -1))
 		print_message(philo, "died\n", DIED);
 	if (!philo->args->finish)
 		set_value(&philo->args->finish_lock, &philo->args->finish, true);
